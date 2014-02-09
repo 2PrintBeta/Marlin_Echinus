@@ -754,34 +754,44 @@ void tp_init()
 
   // Set analog inputs
   ADCSRA = 1<<ADEN | 1<<ADSC | 1<<ADIF | 0x07;
+  #ifdef DIDR0
   DIDR0 = 0;
+  #endif
   #ifdef DIDR2
     DIDR2 = 0;
   #endif
   #if defined(TEMP_0_PIN) && (TEMP_0_PIN > -1)
     #if TEMP_0_PIN < 8
+      #ifdef DIDR0
        DIDR0 |= 1 << TEMP_0_PIN; 
+      #endif
     #else
        DIDR2 |= 1<<(TEMP_0_PIN - 8); 
     #endif
   #endif
   #if defined(TEMP_1_PIN) && (TEMP_1_PIN > -1)
     #if TEMP_1_PIN < 8
+      #ifdef DIDR0
        DIDR0 |= 1<<TEMP_1_PIN; 
+      #endif 
     #else
        DIDR2 |= 1<<(TEMP_1_PIN - 8); 
     #endif
   #endif
   #if defined(TEMP_2_PIN) && (TEMP_2_PIN > -1)
     #if TEMP_2_PIN < 8
+     #ifdef DIDR0
        DIDR0 |= 1 << TEMP_2_PIN; 
+      #endif 
     #else
        DIDR2 |= 1<<(TEMP_2_PIN - 8); 
     #endif
   #endif
   #if defined(TEMP_BED_PIN) && (TEMP_BED_PIN > -1)
     #if TEMP_BED_PIN < 8
+      #ifdef DIDR0
        DIDR0 |= 1<<TEMP_BED_PIN; 
+      #endif 
     #else
        DIDR2 |= 1<<(TEMP_BED_PIN - 8); 
     #endif
@@ -789,9 +799,13 @@ void tp_init()
   
   // Use timer0 for temperature measurement
   // Interleave temperature interrupt with millies interrupt
+ #if defined(__AVR_ATmega128__)
+   OCR0 = 128;
+   TIMSK |= (1<<OCIE0);  
+ #else
   OCR0B = 128;
   TIMSK0 |= (1<<OCIE0B);  
-  
+ #endif
   // Wait for temperature measurement to settle
   delay(250);
 
@@ -1031,7 +1045,11 @@ int read_max6675()
 
 
 // Timer 0 is shared with millies
-ISR(TIMER0_COMPB_vect)
+#if defined(__AVR_ATmega128__)
+ISR(TIMER0_COMP_vect)
+#else
+ISR(TIMER0B_COMP_vect)
+#endif
 {
   //these variables are only accesible from the ISR, but static, so they don't lose their value
   static unsigned char temp_count = 0;
@@ -1106,7 +1124,9 @@ ISR(TIMER0_COMPB_vect)
         #if TEMP_0_PIN > 7
           ADCSRB = 1<<MUX5;
         #else
+          #ifdef ADCSRB
           ADCSRB = 0;
+        #endif
         #endif
         ADMUX = ((1 << REFS0) | (TEMP_0_PIN & 0x07));
         ADCSRA |= 1<<ADSC; // Start conversion
@@ -1128,7 +1148,9 @@ ISR(TIMER0_COMPB_vect)
         #if TEMP_BED_PIN > 7
           ADCSRB = 1<<MUX5;
         #else
+          #ifdef ADCSRB
           ADCSRB = 0;
+        #endif
         #endif
         ADMUX = ((1 << REFS0) | (TEMP_BED_PIN & 0x07));
         ADCSRA |= 1<<ADSC; // Start conversion
@@ -1147,7 +1169,9 @@ ISR(TIMER0_COMPB_vect)
         #if TEMP_1_PIN > 7
           ADCSRB = 1<<MUX5;
         #else
+          #ifdef ADCSRB
           ADCSRB = 0;
+        #endif
         #endif
         ADMUX = ((1 << REFS0) | (TEMP_1_PIN & 0x07));
         ADCSRA |= 1<<ADSC; // Start conversion
@@ -1166,7 +1190,9 @@ ISR(TIMER0_COMPB_vect)
         #if TEMP_2_PIN > 7
           ADCSRB = 1<<MUX5;
         #else
+          #ifdef ADCSRB
           ADCSRB = 0;
+        #endif
         #endif
         ADMUX = ((1 << REFS0) | (TEMP_2_PIN & 0x07));
         ADCSRA |= 1<<ADSC; // Start conversion

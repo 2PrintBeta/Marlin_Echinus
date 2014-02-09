@@ -1570,6 +1570,12 @@
 	#define MSG_ERR_LONG_EXTRUDE_STOP " liian pitka pursotus estetty"
 
 #endif
+#endif // ifndef LANGUAGE_H
+
+
+
+
+
 
 #if LANGUAGE_CHOICE == 10
 

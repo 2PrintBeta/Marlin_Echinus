@@ -313,6 +313,64 @@ static const pin_map_t digitalPinMap[] = {
   {&DDRC, &PINC, &PORTC, 4},  // C4 18
   {&DDRC, &PINC, &PORTC, 5}   // C5 19
 };
+#elif defined(__AVR_ATmega128__)
+// Two Wire (aka I2C) ports
+uint8_t const SDA_PIN = 17;  // C4
+uint8_t const SCL_PIN = 16;  // C5
+
+// SPI port
+uint8_t const SS_PIN = 8;    // B2
+uint8_t const MOSI_PIN = 10;  // B3
+uint8_t const MISO_PIN = 11;  // B4
+uint8_t const SCK_PIN = 9;   // B5
+
+static const pin_map_t digitalPinMap[] = {
+  {&DDRE, &PINE, &PORTE, 0},  // E0  0
+  {&DDRE, &PINE, &PORTE, 1},  // E1  1
+  {&DDRE, &PINE, &PORTE, 2},  // E2  2
+  {&DDRE, &PINE, &PORTE, 3},  // E3  3
+  {&DDRE, &PINE, &PORTE, 4},  // E4  4
+  {&DDRE, &PINE, &PORTE, 5},  // E5  5
+  {&DDRE, &PINE, &PORTE, 6},  // E6  6
+  {&DDRE, &PINE, &PORTE, 7},  // E7  7
+  {&DDRB, &PINB, &PORTB, 0},  // B0  8
+  {&DDRB, &PINB, &PORTB, 1},  // B1  9
+  {&DDRB, &PINB, &PORTB, 2},  // B2 10
+  {&DDRB, &PINB, &PORTB, 3},  // B3 11
+  {&DDRB, &PINB, &PORTB, 4},  // B4 12
+  {&DDRB, &PINB, &PORTB, 5},  // B5 13
+  {&DDRB, &PINB, &PORTB, 6},  // B5 14
+  {&DDRB, &PINB, &PORTB, 7},  // B5 15
+  {&DDRD, &PIND, &PORTD, 0},  // B5 16
+  {&DDRD, &PIND, &PORTD, 1},  // B5 17
+  {&DDRD, &PIND, &PORTD, 2},  // B5 18
+  {&DDRD, &PIND, &PORTD, 3},  // B5 19
+  {&DDRD, &PIND, &PORTD, 4},  // B5 20
+  {&DDRD, &PIND, &PORTD, 5},  // B5 21
+  {&DDRD, &PIND, &PORTD, 6},  // B5 22
+  {&DDRD, &PIND, &PORTD, 7},  // B5 23
+  {&DDRG, &PING, &PORTG, 0},  // B5 24
+  {&DDRG, &PING, &PORTG, 1},  // B5 25
+  {&DDRC, &PINC, &PORTC, 0},  // C0 26
+  {&DDRC, &PINC, &PORTC, 1},  // C1 27
+  {&DDRC, &PINC, &PORTC, 2},  // C2 28
+  {&DDRC, &PINC, &PORTC, 3},  // C3 29
+  {&DDRC, &PINC, &PORTC, 4},  // C4 30
+  {&DDRC, &PINC, &PORTC, 5},  // C5 31
+  {&DDRC, &PINC, &PORTC, 6},  // C5 32
+  {&DDRC, &PINC, &PORTC, 7},  // C5 33
+  {&DDRG, &PING, &PORTG, 2},  // C5 34
+  {&DDRA, &PINA, &PORTA, 7},  // C5 35
+  {&DDRA, &PINA, &PORTA, 6},  // C5 36
+  {&DDRA, &PINA, &PORTA, 5},  // C5 37
+  {&DDRA, &PINA, &PORTA, 4},  // C5 38
+  {&DDRA, &PINA, &PORTA, 3},  // C5 39
+  {&DDRA, &PINA, &PORTA, 2},  // C5 40
+  {&DDRA, &PINA, &PORTA, 1},  // C5 41
+  {&DDRA, &PINA, &PORTA, 0}   // C5 41 
+  
+};
+
 #else  // defined(__AVR_ATmega1280__)
 #error unknown chip
 #endif  // defined(__AVR_ATmega1280__)

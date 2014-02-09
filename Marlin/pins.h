@@ -2478,6 +2478,107 @@
 #endif
 
 
+/****************************************************************************************
+*Echinus pin assignment
+*
+****************************************************************************************/
+#if MOTHERBOARD == 42
+#define KNOWN_BOARD 1
+
+#ifndef __AVR_ATmega128__
+ #error Oops!  Make sure you have 'Echinus' selected from the 'Tools -> Boards' menu.
+#endif
+
+// masks to encode i2c info into the pins
+#define I2C_PIN 0x80000000			 //use i2c ?
+#define I2C_CHIPNUMMASK  0x40000000      //chip number for buffering
+#define I2C_CHIPNUMOFFSET 30
+#define I2C_ADDRMASK 0xFF0000		 //i2c adress
+#define I2C_ADDROFFSET 16
+#define I2C_BITMASK 0xFFFF		     //which bit to set (16 pins available)
+
+#define NUM_OF_I2C_EXPANDERS 2
+
+//i2c chip adress
+#define I2C_ADDR1 (64 << I2C_ADDROFFSET)
+#define I2C_ADDR2 (68 << I2C_ADDROFFSET)
+
+#define I2C_CHIPNUM1  0
+#define I2C_CHIPNUM2  (1 << I2C_CHIPNUMOFFSET)
+
+#define I2C_CHIP1 (I2C_ADDR1 | I2C_CHIPNUM1)
+#define I2C_CHIP2 (I2C_ADDR2 | I2C_CHIPNUM2)
+
+#define X_STEP_PIN         28
+#define X_DIR_PIN          I2C_PIN | I2C_CHIP1 | (1 << 5)
+#define X_ENABLE_PIN       I2C_PIN | I2C_CHIP1 | (1 << 4)
+#define X_MIN_PIN          35
+#define X_MAX_PIN          38
+
+#define Y_STEP_PIN         29
+#define Y_DIR_PIN          I2C_PIN | I2C_CHIP1 | (1 << 1)
+#define Y_ENABLE_PIN       I2C_PIN | I2C_CHIP1 | (1 << 0)
+#define Y_MIN_PIN          36
+#define Y_MAX_PIN          39
+
+#define Z_STEP_PIN         30
+#define Z_DIR_PIN          I2C_PIN | I2C_CHIP2 | (1 << 13) 
+#define Z_ENABLE_PIN       I2C_PIN | I2C_CHIP2 | (1 << 12)
+#define Z_MIN_PIN          37
+#define Z_MAX_PIN          40
+
+#define E0_STEP_PIN        31
+#define E0_DIR_PIN         I2C_PIN | I2C_CHIP2 | (1 << 9) 
+#define E0_ENABLE_PIN      I2C_PIN | I2C_CHIP2 | (1 << 8)
+
+#define E1_STEP_PIN        33
+#define E1_DIR_PIN         I2C_PIN | I2C_CHIP2 | (1 << 5)
+#define E1_ENABLE_PIN      I2C_PIN | I2C_CHIP2 | (1 << 4)
+
+#define E2_STEP_PIN        32
+#define E2_DIR_PIN         I2C_PIN | I2C_CHIP2 | (1 << 1)
+#define E2_ENABLE_PIN      I2C_PIN | I2C_CHIP2 | (1 << 0)
+
+#define LED_PIN            42
+#define LED2_PIN           41
+
+#define FAN_PIN            4
+#define FAN1 PIN           3
+
+// TODO
+#define PS_ON_PIN          -1
+//#define KILL_PIN           46
+#define SUICIDE_PIN 		7
+
+
+#define TEMP_0_PIN         2    // ANALOG NUMBERING 
+#define HEATER_0_PIN       15
+#define TEMP_1_PIN         3     // ANALOG NUMBERING 
+#define HEATER_1_PIN       14
+#define TEMP_2_PIN         -1     // ANALOG NUMBERING 
+#define HEATER_2_PIN       -1
+#define TEMP_BED_PIN       4
+#define HEATER_BED_PIN     13
+
+//echinus has the sd on board
+#define SDSUPPORT
+#define SDPOWER            -1
+#define SDSS				18
+#define SDCARDDETECT       -1
+
+// hitachi lcd on echinus
+#define LCD_PINS_RS  21
+#define LCD_PIN_RW   22
+#define LCD_PINS_ENABLE 23
+#define LCD_PINS_D4 26
+#define LCD_PINS_D5 27
+#define LCD_PINS_D6 19
+#define LCD_PINS_D7 20
+
+#endif //MOTHERBOARD==42
+
+
+
 
 #ifndef KNOWN_BOARD
 #error Unknown MOTHERBOARD value in configuration.h

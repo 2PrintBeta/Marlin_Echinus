@@ -25,7 +25,7 @@
 
 // This determines the communication speed of the printer
 // This determines the communication speed of the printer
-#define BAUDRATE 250000
+#define BAUDRATE 115200
 
 // This enables the serial port associated to the Bluetooth interface
 //#define BTENABLED              // Enable BT interface on AT90USB devices
@@ -68,9 +68,10 @@
 // 91 = Final OMCA board
 // 301 = Rambo
 // 21 = Elefu Ra Board (v3)
+// 42 = Echinus Board
 
 #ifndef MOTHERBOARD
-#define MOTHERBOARD 7
+#define MOTHERBOARD 42
 #endif
 
 // Define this to set a custom name for your generic Mendel,
@@ -81,7 +82,7 @@
 // #define MACHINE_UUID "00000000-0000-0000-0000-000000000000"
 
 // This defines the number of extruders
-#define EXTRUDERS 1
+#define EXTRUDERS 2
 
 //// The following define selects which power supply you have. Please choose the one that matches your setup
 // 1 = ATX
@@ -121,10 +122,10 @@
 // 52 is 200k thermistor - ATC Semitec 204GT-2 (1k pullup)
 // 55 is 100k thermistor - ATC Semitec 104GT-2 (Used in ParCan & J-Head) (1k pullup)
 
-#define TEMP_SENSOR_0 -1
-#define TEMP_SENSOR_1 -1
-#define TEMP_SENSOR_2 0
-#define TEMP_SENSOR_BED 0
+#define TEMP_SENSOR_0 55
+#define TEMP_SENSOR_1 55
+#define TEMP_SENSOR_2 55
+#define TEMP_SENSOR_BED 55
 
 // This makes temp sensor 1 a redundant sensor for sensor 0. If the temperatures difference between these sensors is to high the print will be aborted.
 //#define TEMP_SENSOR_1_AS_REDUNDANT
@@ -482,6 +483,10 @@ const bool Z_MAX_ENDSTOP_INVERTING = true; // set to true to invert the logic of
 // REMEMBER TO INSTALL LiquidCrystal_I2C.h in your ARUDINO library folder: https://github.com/kiyoshigawa/LiquidCrystal_I2C
 //#define RA_CONTROL_PANEL
 
+// The Echinus Vision Control Panel
+// http://www.2printbeta.de/Elektronik/Echinus-Vision-Board::262.html
+#define ECHINUS_VISION
+
 //automatic expansion
 #if defined (MAKRPANEL)
  #define DOGLCD
@@ -608,6 +613,13 @@ const bool Z_MAX_ENDSTOP_INVERTING = true; // set to true to invert the logic of
 # ifndef DEFAULT_LCD_CONTRAST
 #  define DEFAULT_LCD_CONTRAST 32
 # endif
+#endif
+
+#ifdef ECHINUS_VISION
+#define ULTRA_LCD  //general lcd support, also 16x2
+#define LCD_WIDTH 20
+#define LCD_HEIGHT 4
+//#define LCD_HAS_SLOW_BUTTONS
 #endif
 
 // Increase the FAN pwm frequency. Removes the PWM noise but increases heating in the FET/Arduino

@@ -166,9 +166,13 @@ asm volatile ( \
 
 // Some useful constants
 
+#if defined(__AVR_ATmega128__)
+	#define ENABLE_STEPPER_DRIVER_INTERRUPT()  TIMSK |= (1<<OCIE1A)
+	#define DISABLE_STEPPER_DRIVER_INTERRUPT() TIMSK &= ~(1<<OCIE1A)
+#else
 #define ENABLE_STEPPER_DRIVER_INTERRUPT()  TIMSK1 |= (1<<OCIE1A)
 #define DISABLE_STEPPER_DRIVER_INTERRUPT() TIMSK1 &= ~(1<<OCIE1A)
-
+#endif
 
 void checkHitEndstops()
 {

@@ -61,6 +61,10 @@
 #include <SPI.h>
 #endif
 
+#if MOTHERBOARD == 42
+#include "pca9555.h"
+#endif
+
 #define VERSION_STRING  "1.0.0"
 
 // look here for descriptions of gcodes: http://linuxcnc.org/handbook/gcode/g-code.html
@@ -438,13 +442,21 @@ void servo_init()
 
 void setup()
 {
+  
   setup_killpin();
   setup_powerhold();
+  
+  #if MOTHERBOARD == 42
+    init_PCA9555();
+  #endif
+  
   MYSERIAL.begin(BAUDRATE);
   SERIAL_PROTOCOLLNPGM("start");
   SERIAL_ECHO_START;
 
+  
   // Check startup - does nothing if bootloader sets MCUSR to 0
+#if defined(MCUSR)  
   byte mcu = MCUSR;
   if(mcu & 1) SERIAL_ECHOLNPGM(MSG_POWERUP);
   if(mcu & 2) SERIAL_ECHOLNPGM(MSG_EXTERNAL_RESET);
@@ -452,6 +464,7 @@ void setup()
   if(mcu & 8) SERIAL_ECHOLNPGM(MSG_WATCHDOG_RESET);
   if(mcu & 32) SERIAL_ECHOLNPGM(MSG_SOFTWARE_RESET);
   MCUSR=0;
+#endif
 
   SERIAL_ECHOPGM(MSG_MARLIN);
   SERIAL_ECHOLNPGM(VERSION_STRING);

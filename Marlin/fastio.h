@@ -7,7 +7,8 @@
 #define	_FASTIO_ARDUINO_H
 
 #include <avr/io.h>
-
+#include <avr/interrupt.h>
+#include <string.h>
 /*
   utility functions
 */
@@ -4010,6 +4011,48 @@ pins
 #define PG5_DDR			DDRG
 #define PG5_PWM			&OCR0B
 
+
+#endif
+
+/* 
+   Pin defs for AVR_ATmega128
+
+*/ 
+#if defined (__AVR_ATmega128__)
+
+// we need to redirect some pins to i2c, so we can not use the pin macros
+// redirect to functions which choose i2c or direct pin manipulation
+bool read_bit(uint16_t io);
+void write_bit(uint16_t io, uint8_t value);
+void setoutput(uint16_t io);
+void setinput(uint16_t io);
+
+// we can not assemble the defines from the redirected functions.
+//store those information in as arry of structs
+struct pindef_t
+{
+	int pin;
+	int rport;
+	int wport;
+	int ddr;
+	volatile uint16_t* pwm;
+};
+
+extern struct pindef_t pindef[];
+
+
+//redirect pin operations to functions, as we want to handle i2c pins differntly
+#undef SET_OUTPUT
+#define SET_OUTPUT(IO) setoutput(IO)
+#undef SET_INPUT
+#define SET_INPUT(IO) setinput(IO)
+#undef WRITE
+#define WRITE(IO, v) write_bit(IO,v)
+#undef READ
+#define READ(IO) read_bit(IO)
+
+// fake to satify error check below
+#define DIO0_PIN
 
 #endif
 

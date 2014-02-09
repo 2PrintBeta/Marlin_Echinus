@@ -41,6 +41,19 @@
 #define SERIAL_REGNAME_INTERNAL(registerbase,number,suffix) registerbase##number##suffix
 #endif
 
+
+// remove REGNAMES without suffix
+#undef U2X
+#undef RXEN
+#undef TXEN
+#undef RXCIE
+#undef UDRE
+#undef UDR
+#undef UBRR
+#undef RXC
+#undef USART
+#undef UCSR
+
 // Registers used by MarlinSerial class (these are expanded 
 // depending on selected serial port
 #define M_UCSRxA SERIAL_REGNAME(UCSR,SERIAL_PORT,A) // defines M_UCSRxA to be UCSRnA where n is the serial port number
