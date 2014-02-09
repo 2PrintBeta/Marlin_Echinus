@@ -33,6 +33,9 @@
 #elif MOTHERBOARD == 77
 	#define MACHINE_NAME "3Drag"
 	#define FIRMWARE_URL "http://3dprint.elettronicain.it/"
+#elif MOTHERBOARD == 42
+	#define MACHINE_NAME "Printupy"
+	#define FIRMWARE_URL "https://github.com/domonoky/Marlin"
 #else
 	#ifdef CUSTOM_MENDEL_NAME
 		#define MACHINE_NAME CUSTOM_MENDEL_NAME
@@ -1570,11 +1573,6 @@
 	#define MSG_ERR_LONG_EXTRUDE_STOP " liian pitka pursotus estetty"
 
 #endif
-#endif // ifndef LANGUAGE_H
-
-
-
-
 
 
 #if LANGUAGE_CHOICE == 10

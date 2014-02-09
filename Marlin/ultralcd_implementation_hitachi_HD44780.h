@@ -102,6 +102,12 @@ extern volatile uint16_t buttons;  //an extended version of the last checked but
 #elif defined(NEWPANEL)
   #define LCD_CLICKED (buttons&EN_C)
   
+#elif defined(ECHINUS_VISION)
+	
+	#define EN_B (1<<BLEN_B) 
+	#define EN_A (1<<BLEN_A)
+	#define EN_C (1<<BLEN_C) 
+	#define LCD_CLICKED (buttons&EN_C)
 #else // old style ULTIPANEL
   //bits in the shift register that carry the buttons for:
   // left up center down right red(stop)
@@ -758,8 +764,8 @@ extern uint32_t blocking_enc;
 
 static uint8_t lcd_implementation_read_slow_buttons()
 {
-  #ifdef LCD_I2C_TYPE_MCP23017
   uint8_t slow_buttons;
+  #ifdef LCD_I2C_TYPE_MCP23017
     // Reading these buttons this is likely to be too slow to call inside interrupt context
     // so they are called during normal lcd_update
     slow_buttons = lcd.readButtons() << B_I2C_BTN_OFFSET; 
@@ -770,6 +776,9 @@ static uint8_t lcd_implementation_read_slow_buttons()
        }
     }
     #endif
+	#ifdef ECHINUS_VISION
+		slow_buttons = read_PCA9555_inputs();
+	#endif
     return slow_buttons; 
   #endif
 }

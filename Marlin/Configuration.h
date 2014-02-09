@@ -619,7 +619,7 @@ const bool Z_MAX_ENDSTOP_INVERTING = true; // set to true to invert the logic of
 #define ULTRA_LCD  //general lcd support, also 16x2
 #define LCD_WIDTH 20
 #define LCD_HEIGHT 4
-//#define LCD_HAS_SLOW_BUTTONS
+#define LCD_HAS_SLOW_BUTTONS
 #endif
 
 // Increase the FAN pwm frequency. Removes the PWM noise but increases heating in the FET/Arduino

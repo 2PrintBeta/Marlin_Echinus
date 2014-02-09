@@ -2490,24 +2490,16 @@
 #endif
 
 // masks to encode i2c info into the pins
-#define I2C_PIN 0x80000000			 //use i2c ?
-#define I2C_CHIPNUMMASK  0x40000000      //chip number for buffering
-#define I2C_CHIPNUMOFFSET 30
-#define I2C_ADDRMASK 0xFF0000		 //i2c adress
-#define I2C_ADDROFFSET 16
+#define I2C_PIN 0x200			 //use i2c ?
+#define I2C_CHIPNUMMASK  0x100      //chip number for buffering
+#define I2C_CHIPNUMOFFSET 9
 #define I2C_BITMASK 0xFFFF		     //which bit to set (16 pins available)
 
 #define NUM_OF_I2C_EXPANDERS 2
 
-//i2c chip adress
-#define I2C_ADDR1 (64 << I2C_ADDROFFSET)
-#define I2C_ADDR2 (68 << I2C_ADDROFFSET)
-
-#define I2C_CHIPNUM1  0
-#define I2C_CHIPNUM2  (1 << I2C_CHIPNUMOFFSET)
-
-#define I2C_CHIP1 (I2C_ADDR1 | I2C_CHIPNUM1)
-#define I2C_CHIP2 (I2C_ADDR2 | I2C_CHIPNUM2)
+//i2c chip num
+#define I2C_CHIP1 (0 << I2C_CHIPNUMOFFSET)
+#define I2C_CHIP2 (1 << I2C_CHIPNUMOFFSET)
 
 #define X_STEP_PIN         28
 #define X_DIR_PIN          I2C_PIN | I2C_CHIP1 | (1 << 5)
@@ -2575,10 +2567,12 @@
 #define LCD_PINS_D6 19
 #define LCD_PINS_D7 20
 
+// button defines for echinus (offset in the i2c extport pins) 
+#define BLEN_A 6
+#define BLEN_B 0
+#define BLEN_C 5
+
 #endif //MOTHERBOARD==42
-
-
-
 
 #ifndef KNOWN_BOARD
 #error Unknown MOTHERBOARD value in configuration.h
