@@ -319,10 +319,10 @@ uint8_t const SDA_PIN = 17;  // C4
 uint8_t const SCL_PIN = 16;  // C5
 
 // SPI port
-uint8_t const SS_PIN = 8;    // B2
-uint8_t const MOSI_PIN = 10;  // B3
-uint8_t const MISO_PIN = 11;  // B4
-uint8_t const SCK_PIN = 9;   // B5
+uint8_t const SS_PIN = 8;    // B0
+uint8_t const MOSI_PIN = 10;  // B2
+uint8_t const MISO_PIN = 11;  // B3
+uint8_t const SCK_PIN = 9;   // B1
 
 static const pin_map_t digitalPinMap[] = {
   {&DDRE, &PINE, &PORTE, 0},  // E0  0
@@ -424,3 +424,4 @@ static inline __attribute__((always_inline))
 
 
 #endif
+

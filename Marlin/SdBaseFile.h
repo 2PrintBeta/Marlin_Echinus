@@ -322,6 +322,7 @@ class SdBaseFile {
   int16_t write(const void* buf, uint16_t nbyte);
 //------------------------------------------------------------------------------
  private:
+
   // allow SdFat to set cwd_
   friend class SdFat;
   // global pointer to cwd dir
@@ -481,3 +482,4 @@ class SdBaseFile {
 
 #endif  // SdBaseFile_h
 #endif
+

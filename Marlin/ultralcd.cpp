@@ -20,7 +20,7 @@ int absPreheatHPBTemp;
 int absPreheatFanSpeed;
 
 
-#ifdef ULTIPANEL
+#if defined(ULTIPANEL) | defined(ECHINUS_VISION) 
 static float manual_feedrate[] = MANUAL_FEEDRATE;
 #endif // ULTIPANEL
 
@@ -45,7 +45,7 @@ void copy_and_scalePID_d();
 
 /* Different menus */
 static void lcd_status_screen();
-#ifdef ULTIPANEL
+#if defined(ULTIPANEL) | defined(ECHINUS_VISION) 
 extern bool powersupply;
 static void lcd_main_menu();
 static void lcd_tune_menu();
@@ -189,7 +189,7 @@ static void lcd_status_screen()
         lcd_implementation_status_screen();
         lcd_status_update_delay = 10;   /* redraw the main screen every second. This is easier then trying keep track of all things that change on the screen */
     }
-#ifdef ULTIPANEL
+#if defined(ULTIPANEL) | defined(ECHINUS_VISION) 
     if (LCD_CLICKED)
     {
         currentMenu = lcd_main_menu;
@@ -228,7 +228,7 @@ static void lcd_status_screen()
 #endif//ULTIPANEL
 }
 
-#ifdef ULTIPANEL
+#if defined(ULTIPANEL) | defined(ECHINUS_VISION)
 static void lcd_return_to_status()
 {
     encoderPosition = 0;
@@ -237,15 +237,20 @@ static void lcd_return_to_status()
 
 static void lcd_sdcard_pause()
 {
+#ifdef SDSUPPORT
     card.pauseSDPrint();
+#endif
 }
 static void lcd_sdcard_resume()
 {
+#ifdef SDSUPPORT
     card.startFileprint();
+#endif
 }
 
 static void lcd_sdcard_stop()
 {
+#ifdef SDSUPPORT
     card.sdprinting = false;
     card.closefile();
     quickStop();
@@ -254,6 +259,7 @@ static void lcd_sdcard_stop()
         enquecommand_P(PSTR(SD_FINISHED_RELEASECOMMAND));
     }
     autotempShutdown();
+#endif
 }
 
 /* Menu implementation */
@@ -776,18 +782,23 @@ static void lcd_control_retract_menu()
 #if SDCARDDETECT == -1
 static void lcd_sd_refresh()
 {
+#ifdef SDSUPPORT
     card.initsd();
     currentMenuViewOffset = 0;
+#endif
 }
 #endif
 static void lcd_sd_updir()
 {
+#ifdef SDSUPPORT
     card.updir();
     currentMenuViewOffset = 0;
+#endif
 }
 
 void lcd_sdcard_menu()
 {
+#ifdef SDSUPPORT
     if (lcdDrawUpdate == 0 && LCD_CLICKED == 0)
         return;	// nothing to do (so don't thrash the SD card)
     uint16_t fileCnt = card.getnrfilenames();
@@ -823,6 +834,7 @@ void lcd_sdcard_menu()
         }
     }
     END_MENU();
+#endif
 }
 
 #define menu_edit_type(_type, _name, _strFunc, scale) \
@@ -973,8 +985,10 @@ static void menu_action_sdfile(const char* filename, char* longFilename)
 }
 static void menu_action_sddirectory(const char* filename, char* longFilename)
 {
+#ifdef SDSUPPORT
     card.chdir(filename);
     encoderPosition = 0;
+#endif
 }
 static void menu_action_setting_edit_bool(const char* pstr, bool* ptr)
 {
@@ -1068,7 +1082,7 @@ void lcd_update()
 
     if (lcd_next_update_millis < millis())
     {
-#ifdef ULTIPANEL
+#if defined(ULTIPANEL) | defined(ECHINUS_VISION)
 		#ifdef REPRAPWORLD_KEYPAD
         	if (REPRAPWORLD_KEYPAD_MOVE_Z_UP) {
         		reprapworld_keypad_move_z_up();
@@ -1174,6 +1188,52 @@ void lcd_setcontrast(uint8_t value)
 }
 #endif
 
+#ifdef ECHINUS_VISION
+void lcd_buttons_update()
+{
+    buttons = slow_buttons;
+
+    //manage encoder rotation
+    uint8_t enc=0;
+    if(buttons&EN_A)
+        enc|=(1<<0);
+    if(buttons&EN_B)
+        enc|=(1<<1);
+
+    if(enc != lastEncoderBits)
+    {
+        switch(enc)
+        {
+        case encrot0:
+            if(lastEncoderBits==encrot3)
+                encoderDiff++;
+            else if(lastEncoderBits==encrot1)
+                encoderDiff--;
+            break;
+        case encrot1:
+            if(lastEncoderBits==encrot0)
+                encoderDiff++;
+            else if(lastEncoderBits==encrot2)
+                encoderDiff--;
+            break;
+        case encrot2:
+            if(lastEncoderBits==encrot1)
+                encoderDiff++;
+            else if(lastEncoderBits==encrot3)
+                encoderDiff--;
+            break;
+        case encrot3:
+            if(lastEncoderBits==encrot2)
+                encoderDiff++;
+            else if(lastEncoderBits==encrot0)
+                encoderDiff--;
+            break;
+        }
+    }
+    lastEncoderBits = enc;
+}
+#endif
+
 #ifdef ULTIPANEL
 /* Warning: This function is called from interrupt context */
 void lcd_buttons_update()
@@ -1226,6 +1286,7 @@ void lcd_buttons_update()
         enc|=(1<<0);
     if(buttons&EN_B)
         enc|=(1<<1);
+
     if(enc != lastEncoderBits)
     {
         switch(enc)
@@ -1486,3 +1547,4 @@ void copy_and_scalePID_d()
 }
 
 #endif //ULTRA_LCD
+

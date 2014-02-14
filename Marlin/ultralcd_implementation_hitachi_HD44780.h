@@ -19,7 +19,7 @@ extern volatile uint16_t buttons;  //an extended version of the last checked but
 // macro name. The mapping is independent of whether the button is directly connected or 
 // via a shift/i2c register.
 
-#ifdef ULTIPANEL
+#ifdef ULTIPANEL 
 // All Ultipanels might have an encoder - so this is always be mapped onto first two bits
 #define BLEN_B 1
 #define BLEN_A 0
@@ -102,12 +102,6 @@ extern volatile uint16_t buttons;  //an extended version of the last checked but
 #elif defined(NEWPANEL)
   #define LCD_CLICKED (buttons&EN_C)
   
-#elif defined(ECHINUS_VISION)
-	
-	#define EN_B (1<<BLEN_B) 
-	#define EN_A (1<<BLEN_A)
-	#define EN_C (1<<BLEN_C) 
-	#define LCD_CLICKED (buttons&EN_C)
 #else // old style ULTIPANEL
   //bits in the shift register that carry the buttons for:
   // left up center down right red(stop)
@@ -141,6 +135,14 @@ extern volatile uint16_t buttons;  //an extended version of the last checked but
 #endif 
 
 #endif //ULTIPANEL
+
+#ifdef ECHINUS_VISION
+	#define EN_B (1<<BLEN_B) 
+	#define EN_A (1<<BLEN_A)
+	#define EN_C (1<<BLEN_C) 
+	#define LCD_CLICKED (buttons&EN_C)
+#endif
+
 
 ////////////////////////////////////
 // Create LCD class instance and chipset-specific information
@@ -194,6 +196,10 @@ extern volatile uint16_t buttons;  //an extended version of the last checked but
   #define LCD_CLASS LiquidCrystal_SR
   LCD_CLASS lcd(SR_DATA_PIN, SR_CLK_PIN);
 
+#elif defined(ECHINUS_VISION)
+  #include "lcd_ks0073.h"
+  #include "pca9555.h"
+  LcdKS0073 lcd;
 #else
   // Standard directly connected LCD implementations
   #if LANGUAGE_CHOICE == 6
@@ -330,7 +336,7 @@ static void lcd_implementation_init()
 #else
     lcd.begin(LCD_WIDTH, LCD_HEIGHT);
 #endif
-
+   
     lcd.createChar(LCD_STR_BEDTEMP[0], bedTemp);
     lcd.createChar(LCD_STR_DEGREE[0], degree);
     lcd.createChar(LCD_STR_THERMOMETER[0], thermometer);
@@ -339,7 +345,6 @@ static void lcd_implementation_init()
     lcd.createChar(LCD_STR_FOLDER[0], folder);
     lcd.createChar(LCD_STR_FEEDRATE[0], feedrate);
     lcd.createChar(LCD_STR_CLOCK[0], clock);
-    lcd.clear();
 }
 static void lcd_implementation_clear()
 {
@@ -384,6 +389,7 @@ Possible status screens:
 */
 static void lcd_implementation_status_screen()
 {
+
     int tHotend=int(degHotend(0) + 0.5);
     int tTarget=int(degTargetHotend(0) + 0.5);
 
@@ -525,13 +531,14 @@ static void lcd_implementation_drawmenu_generic(uint8_t row, const char* pstr, c
     lcd.setCursor(0, row);
     lcd.print(pre_char);
     while( ((c = pgm_read_byte(pstr)) != '\0') && (n>0) )
-    {
+    {   
         lcd.print(c);
         pstr++;
         n--;
     }
     while(n--)
         lcd.print(' ');
+
     lcd.print(post_char);
     lcd.print(' ');
 }
@@ -776,12 +783,15 @@ static uint8_t lcd_implementation_read_slow_buttons()
        }
     }
     #endif
-	#ifdef ECHINUS_VISION
-		slow_buttons = read_PCA9555_inputs();
-	#endif
-    return slow_buttons; 
   #endif
+
+  #ifdef ECHINUS_VISION
+	slow_buttons = read_PCA9555_inputs();
+  #endif
+
+  return slow_buttons; 
 }
 #endif
 
 #endif//ULTRA_LCD_IMPLEMENTATION_HITACHI_HD44780_H
+

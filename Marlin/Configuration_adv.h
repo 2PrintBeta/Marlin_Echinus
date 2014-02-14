@@ -235,7 +235,7 @@
 #define DEFAULT_MINTRAVELFEEDRATE     0.0
 
 // Feedrates for manual moves along X, Y, Z, E from panel
-#ifdef ULTIPANEL
+#if defined(ULTIPANEL) | defined(ECHINUS_VISION) 
 #define MANUAL_FEEDRATE {50*60, 50*60, 4*60, 60}  // set the speeds for manual moves (mm/min)
 #endif
 
@@ -377,7 +377,7 @@ const unsigned int dropsegments=5; //everything with less than this number of st
 #if defined SDSUPPORT
   #define BLOCK_BUFFER_SIZE 16   // SD,LCD,Buttons take more memory, block buffer needs to be smaller
 #else
-  #define BLOCK_BUFFER_SIZE 16 // maximize block buffer
+  #define BLOCK_BUFFER_SIZE 8 // maximize block buffer
 #endif
 
 
@@ -475,3 +475,4 @@ const unsigned int dropsegments=5; //everything with less than this number of st
 
 
 #endif //__CONFIGURATION_ADV_H
+

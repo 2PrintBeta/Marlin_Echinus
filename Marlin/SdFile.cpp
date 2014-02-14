@@ -28,7 +28,7 @@
  * \param[in] oflag Values for \a oflag are constructed by a bitwise-inclusive
  * OR of open flags. see SdBaseFile::open(SdBaseFile*, const char*, uint8_t).
  */
-SdFile::SdFile(const char* path, uint8_t oflag) : SdBaseFile(path, oflag) {
+SdFile::SdFile(const char* path, uint8_t oflag)  : SdBaseFile(path, oflag) {
 }
 //------------------------------------------------------------------------------
 /** Write data to an open file.
@@ -93,3 +93,4 @@ void SdFile::writeln_P(PGM_P str) {
 
 
 #endif
+

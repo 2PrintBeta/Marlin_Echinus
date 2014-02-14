@@ -71,6 +71,7 @@
  * SPI init rate for SD initialization commands. Must be 5 (F_CPU/64)
  * or 6 (F_CPU/128).
  */
+
 #define SPI_SD_INIT_RATE 5
 //------------------------------------------------------------------------------
 /**
@@ -119,3 +120,4 @@ uint8_t const SOFT_SPI_SCK_PIN = 13;
 
 
 #endif
+

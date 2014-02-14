@@ -452,11 +452,10 @@ void setup()
   
   MYSERIAL.begin(BAUDRATE);
   SERIAL_PROTOCOLLNPGM("start");
-  SERIAL_ECHO_START;
-
+  SERIAL_ECHO_START; 
   
   // Check startup - does nothing if bootloader sets MCUSR to 0
-#if defined(MCUSR)  
+#if !defined (__AVR_ATmega128__)
   byte mcu = MCUSR;
   if(mcu & 1) SERIAL_ECHOLNPGM(MSG_POWERUP);
   if(mcu & 2) SERIAL_ECHOLNPGM(MSG_EXTERNAL_RESET);
@@ -491,17 +490,16 @@ void setup()
 
   // loads data from EEPROM if available else uses defaults (and resets step acceleration rate)
   Config_RetrieveSettings();
-
+ 
   tp_init();    // Initialize temperature loop
   plan_init();  // Initialize planner;
   watchdog_init();
   st_init();    // Initialize stepper, this enables interrupts!
   setup_photpin();
   servo_init();
-
   lcd_init();
-  _delay_ms(1000);	// wait 1sec to display the splash screen
 
+  _delay_ms(1000);	// wait 1sec to display the splash screen
   #if defined(CONTROLLERFAN_PIN) && CONTROLLERFAN_PIN > -1
     SET_OUTPUT(CONTROLLERFAN_PIN); //Set pin used for driver cooling fan
   #endif
@@ -542,6 +540,7 @@ void loop()
       {
         process_commands();
       }
+     process_commands();
     #else
       process_commands();
     #endif //SDSUPPORT
@@ -2372,16 +2371,16 @@ void process_commands()
       SERIAL_ECHOPGM(MSG_HOTEND_OFFSET);
       for(tmp_extruder = 0; tmp_extruder < EXTRUDERS; tmp_extruder++)
       {
-         SERIAL_ECHO(" ");
+         SERIAL_ECHOPGM(" ");
          SERIAL_ECHO(extruder_offset[X_AXIS][tmp_extruder]);
-         SERIAL_ECHO(",");
+         SERIAL_ECHOPGM(",");
          SERIAL_ECHO(extruder_offset[Y_AXIS][tmp_extruder]);
       #ifdef DUAL_X_CARRIAGE
-         SERIAL_ECHO(",");
+         SERIAL_ECHOPGM(",");
          SERIAL_ECHO(extruder_offset[Z_AXIS][tmp_extruder]);
       #endif
       }
-      SERIAL_ECHOLN("");
+      SERIAL_ECHOLNPGM("");
     }break;
     #endif
     case 220: // M220 S<factor in percent>- set speed factor override percentage
@@ -2473,9 +2472,9 @@ void process_commands()
           }
           else {
             SERIAL_ECHO_START;
-            SERIAL_ECHO("Servo ");
+            SERIAL_ECHOPGM("Servo ");
             SERIAL_ECHO(servo_index);
-            SERIAL_ECHOLN(" out of range");
+            SERIAL_ECHOLNPGM(" out of range");
           }
         }
         else if (servo_index >= 0) {
@@ -2817,13 +2816,13 @@ void process_commands()
             
           SERIAL_ECHO_START;
           SERIAL_ECHOPGM(MSG_HOTEND_OFFSET);
-          SERIAL_ECHO(" ");
+          SERIAL_ECHOPGM(" ");
           SERIAL_ECHO(extruder_offset[X_AXIS][0]);
-          SERIAL_ECHO(",");
+          SERIAL_ECHOPGM(",");
           SERIAL_ECHO(extruder_offset[Y_AXIS][0]);
-          SERIAL_ECHO(" ");
+          SERIAL_ECHOPGM(" ");
           SERIAL_ECHO(duplicate_extruder_x_offset);
-          SERIAL_ECHO(",");
+          SERIAL_ECHOPGM(",");
           SERIAL_ECHOLN(extruder_offset[Y_AXIS][1]);
         }
         else if (dual_x_carriage_mode != DXC_FULL_CONTROL_MODE && dual_x_carriage_mode != DXC_AUTO_PARK_MODE)
@@ -2908,7 +2907,7 @@ void process_commands()
     tmp_extruder = code_value();
     if(tmp_extruder >= EXTRUDERS) {
       SERIAL_ECHO_START;
-      SERIAL_ECHO("T");
+      SERIAL_ECHOPGM("T");
       SERIAL_ECHO(tmp_extruder);
       SERIAL_ECHOLN(MSG_INVALID_EXTRUDER);
     }
@@ -3522,4 +3521,5 @@ bool setTargetedHotend(int code){
   }
   return false;
 }
+
 

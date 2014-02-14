@@ -3,7 +3,7 @@
 
 #ifdef SDSUPPORT
 
-#define MAX_DIR_DEPTH 10
+#define MAX_DIR_DEPTH 1
 
 #include "SdFile.h"
 enum LsAction {LS_SerialPrint,LS_Count,LS_GetFilename};
@@ -40,9 +40,9 @@ public:
   void setroot();
 
 
-  FORCE_INLINE bool isFileOpen() { return file.isOpen(); }
-  FORCE_INLINE bool eof() { return sdpos>=filesize ;};
-  FORCE_INLINE int16_t get() {  sdpos = file.curPosition();return (int16_t)file.read();};
+  FORCE_INLINE bool isFileOpen() { return file.isOpen();}
+  FORCE_INLINE bool eof() { return sdpos>=filesize ; };
+  FORCE_INLINE int16_t get() { sdpos = file.curPosition();return (int16_t)file.read(); };
   FORCE_INLINE void setIndex(long index) {sdpos = index;file.seekSet(index);};
   FORCE_INLINE uint8_t percentDone(){if(!isFileOpen()) return 0; if(filesize) return sdpos/((filesize+99)/100); else return 0;};
   FORCE_INLINE char* getWorkDirName(){workDir.getFilename(filename);return filename;};
@@ -57,7 +57,9 @@ public:
   bool filenameIsDir;
   int lastnr; //last number of the autostart;
 private:
+
   SdFile root,*curDir,workDir,workDirParents[MAX_DIR_DEPTH];
+
   uint16_t workDirDepth;
   Sd2Card card;
   SdVolume volume;
@@ -78,6 +80,7 @@ private:
   int16_t nrFiles; //counter for the files in the current directory and recycled as position counter for getting the nrFiles'th name in the directory.
   char* diveDirName;
   void lsDive(const char *prepend,SdFile parent);
+
 };
 extern CardReader card;
 #define IS_SD_PRINTING (card.sdprinting)
@@ -99,3 +102,4 @@ extern CardReader card;
 
 #endif //SDSUPPORT
 #endif
+

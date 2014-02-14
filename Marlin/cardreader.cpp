@@ -151,6 +151,8 @@ void CardReader::initsd()
     root.close();
 #ifdef SDSLOW
   if (!card.init(SPI_HALF_SPEED,SDSS))
+#elif defined(SDEXTRASLOW)
+  if (!card.init(SPI_QUARTER_SPEED,SDSS))
 #else
   if (!card.init(SPI_FULL_SPEED,SDSS))
 #endif
@@ -636,3 +638,4 @@ void CardReader::printingHasFinished()
     }
 }
 #endif //SDSUPPORT
+

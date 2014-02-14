@@ -127,7 +127,7 @@ bool SdVolume::cacheFlush() {
 bool SdVolume::cacheRawBlock(uint32_t blockNumber, bool dirty) {
   if (cacheBlockNumber_ != blockNumber) {
     if (!cacheFlush()) goto fail;
-    if (!sdCard_->readBlock(blockNumber, cacheBuffer_.data)) goto fail;
+    if (!sdCard_->readBlock(blockNumber, cacheBuffer_.data))goto fail;
     cacheBlockNumber_ = blockNumber;
   }
   if (dirty) cacheDirty_ = true;
@@ -403,3 +403,4 @@ bool SdVolume::init(Sd2Card* dev, uint8_t part) {
   return false;
 }
 #endif
+

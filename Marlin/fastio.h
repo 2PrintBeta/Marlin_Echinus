@@ -4020,21 +4020,22 @@ pins
 */ 
 #if defined (__AVR_ATmega128__)
 
+
 // we need to redirect some pins to i2c, so we can not use the pin macros
 // redirect to functions which choose i2c or direct pin manipulation
-bool read_bit(uint16_t io);
-void write_bit(uint16_t io, uint8_t value);
-void setoutput(uint16_t io);
-void setinput(uint16_t io);
+bool read_bit(uint32_t io);
+void write_bit(uint32_t io, uint8_t value);
+void setoutput(uint32_t io);
+void setinput(uint32_t io);
 
 // we can not assemble the defines from the redirected functions.
 //store those information in as arry of structs
 struct pindef_t
 {
 	int pin;
-	int rport;
-	int wport;
-	int ddr;
+	volatile uint8_t* rport;
+	volatile uint8_t* wport;
+	volatile uint8_t* ddr;
 	volatile uint16_t* pwm;
 };
 
@@ -4061,3 +4062,4 @@ extern struct pindef_t pindef[];
 #endif
 
 #endif /* _FASTIO_ARDUINO_H */
+

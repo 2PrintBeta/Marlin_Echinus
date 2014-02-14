@@ -216,52 +216,51 @@ size_t LcdKS0073::write(uint8_t value)
 
 inline void LcdKS0073::command(uint8_t value) 
 {
-
-SERIAL_ECHOLN("lcdcmd");
+;
 }
 
 void LcdKS0073::home()
-{ SERIAL_ECHOLN("home");
+{ 
 }
 
 void LcdKS0073::noDisplay()
-{ SERIAL_ECHOLN("noDisplay");
+{ 
 
 }
 void LcdKS0073::display()
-{ SERIAL_ECHOLN("display");
+{ 
 
 }
 void LcdKS0073::noBlink()
-{ SERIAL_ECHOLN("noBlink");
+{ 
 
 }
 void LcdKS0073::blink()
-{ SERIAL_ECHOLN("blink");
+{ 
 }
 void LcdKS0073::noCursor()
-{ SERIAL_ECHOLN("noCursor");
+{ 
 }
 void LcdKS0073::cursor()
-{ SERIAL_ECHOLN("cursor");
+{ 
 }
 void LcdKS0073::scrollDisplayLeft()
-{ SERIAL_ECHOLN("scrollDisplayLeft");
+{ 
 }
 void LcdKS0073::scrollDisplayRight()
-{ SERIAL_ECHOLN("scrollDisplayRight");
+{ 
 }
 void LcdKS0073::leftToRight()
-{ SERIAL_ECHOLN("leftToRight");
+{ 
 }
 void LcdKS0073::rightToLeft()
-{ SERIAL_ECHOLN("rightToLeft");
+{ 
 }
 void LcdKS0073::autoscroll()
-{ SERIAL_ECHOLN("autoscroll");
+{ 
 }
 void LcdKS0073::noAutoscroll()
-{ SERIAL_ECHOLN("noAutoscroll");
+{ 
 }
 
 
@@ -457,4 +456,5 @@ uint8_t LcdKS0073::lcd_read(uint8_t rs)
 
     return data;
 }
+
 

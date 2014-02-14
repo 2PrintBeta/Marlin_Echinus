@@ -25,12 +25,12 @@
   #define LCD_UPDATE_INTERVAL 100
   #define LCD_TIMEOUT_TO_STATUS 15000
 
-  #ifdef ULTIPANEL
+  #if defined(ULTIPANEL) | defined(ECHINUS_VISION)
   void lcd_buttons_update();
   extern volatile uint8_t buttons;  //the last checked buttons in a bit array.
   #ifdef REPRAPWORLD_KEYPAD
     extern volatile uint8_t buttons_reprapworld_keypad; // to store the keypad shiftregister values
-  #endif
+  #endif   
   #else
   FORCE_INLINE void lcd_buttons_update() {}
   #endif
@@ -71,6 +71,8 @@
   	  #define REPRAPWORLD_KEYPAD_MOVE_Y_UP (buttons_reprapworld_keypad&EN_REPRAPWORLD_KEYPAD_UP)
   	  #define REPRAPWORLD_KEYPAD_MOVE_HOME (buttons_reprapworld_keypad&EN_REPRAPWORLD_KEYPAD_MIDDLE)
     #endif //REPRAPWORLD_KEYPAD
+  #elif defined(ECHINUS_VISION)
+    #define LCD_CLICKED (buttons&EN_C)
   #else
     //atomatic, do not change
     #define B_LE (1<<BL_LE)
@@ -112,3 +114,4 @@ char *ftostr51(const float &x);
 char *ftostr52(const float &x);
 
 #endif //ULTRALCD
+

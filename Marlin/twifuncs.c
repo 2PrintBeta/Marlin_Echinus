@@ -47,7 +47,7 @@ void i2c_init(void)
  Write number of Bytes to the I2C device, 
 
 @param   	addr 		I2C -Adresse mit Bit 0 = 0 (Write)800
-@param    	data		Daten für Versand
+@param    	data		Daten fï¿½r Versand
 
  Return:  0 = No Error ; 1 = Error
 ****************/
@@ -82,7 +82,7 @@ int writeI2Ccmd(unsigned char addr, unsigned char data)
  Write array of Bytes to the I2C device, 
 
 @param   	addr 			I2C -Adresse mit Bit 0 = 0 (Write)800
-@param    	data			Daten für Versand
+@param    	data			Daten fï¿½r Versand
 @param		noOfDatabytes	anz der Datenbytes
  Return:  0 = No Error ; 1 = Error
 ****************/
@@ -297,6 +297,7 @@ unsigned char i2c_write( unsigned char data )
 	return NO_ERROR;
 
 }/* i2c_write */
+
 
 
 

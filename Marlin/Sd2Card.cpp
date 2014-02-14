@@ -292,6 +292,7 @@ bool Sd2Card::init(uint8_t sckRateID, uint8_t chipSelectPin) {
 
   // set pin modes
   pinMode(chipSelectPin_, OUTPUT);
+  
   chipSelectHigh();
   pinMode(SPI_MISO_PIN, INPUT);
   pinMode(SPI_MOSI_PIN, OUTPUT);
@@ -639,3 +640,4 @@ bool Sd2Card::writeStop() {
 }
 
 #endif
+

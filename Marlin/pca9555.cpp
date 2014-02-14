@@ -14,153 +14,124 @@
 #include <compat/twi.h>
 
 #include "pca9555.h"
-#include <Wire.h>
 #include "Marlin.h"
 #include "pins.h"
 
-// define register offsets
+
+extern "C" {
+    #include "twifuncs.h"
+};
+
 #define REG_IN 0
 #define REG_OUT 2
 #define REG_POL 4
 #define REG_DIR 6
-#define I2C_ADDR 8
+#define I2C_ADDR 8 
 
 /** variable, holding the boards PCA9555-data **/
-// holds also default values at start
-volatile uint8_t i2cPortBuf[NUM_OF_I2C_EXPANDERS][9] = {	
-	//	inL, 	inH, 	outL, 	outH, 	polL, 	polH, 	dirL, 	dirH,addr 	
-		 {0, 	0, 		255, 	0, 		0, 		0, 		0,    127, 	64},	    // Device 1 (L: Mot1+2, H: ExternalPort)
-		 {0, 	0, 		255,  255, 		0, 		0, 		0, 		0, 	68}		// Device 2 (L: Mot5+6, H: Mot3+4)
-		 };	
-	
+volatile uint8_t i2cPortBuf[NUM_OF_I2C_EXPANDERS][9] =
+		//	inL, 	inH, 	outL, 	outH, 	polL, 	polH, 	dirL, 	dirH, 	address
+		 {	{0, 	0, 		255, 	0, 		0, 		0, 		0, 		127, 	64},	// Device 1 (L: Mot1+2, H: ExternalPort)
+			{0, 	0, 		255, 	255, 	0, 		0, 		0, 		0, 		68}};	// Device 2 (L: Mot5+6, H: Mot3+4)
+
+
 /***********
 @brief Initialize all PCA9555-devices
 ***********/
-void init_PCA9555()
+uint8_t init_PCA9555 ()
 {	
-	//init i2c 
-	Wire.begin();
+    i2c_init();
+	int8_t testi2c = 0;
+	unsigned char databytes[3] = {00 , 00, 00};
+    for(int i=0; i < NUM_OF_I2C_EXPANDERS; i++)
+	{
+		databytes[0] = REG_OUT;		// register-adress of outputport
+		databytes[1] = i2cPortBuf[i][REG_OUT];
+		databytes[2] = i2cPortBuf[i][REG_OUT+1];
+        writeI2Ccmds(i2cPortBuf[i][I2C_ADDR], databytes , 3);
 
-	for(int i =0; i < NUM_OF_I2C_EXPANDERS; i++)	// only 2 expanders in echinus 
-	{		
-		Wire.beginTransmission(i2cPortBuf[i][I2C_ADDR]);  //output register
-		Wire.write(REG_OUT);
-		Wire.write(i2cPortBuf[i][REG_OUT]);
-		Wire.write(i2cPortBuf[i][REG_OUT+1]);
-		Wire.endTransmission();
-		
-		Wire.beginTransmission(i2cPortBuf[i][I2C_ADDR]);  //polaritiy register
-		Wire.write(REG_POL);
-		Wire.write(i2cPortBuf[i][REG_POL]);
-		Wire.write(i2cPortBuf[i][REG_POL+1]);
-		Wire.endTransmission();
+		databytes[0] = REG_POL;		// register-adress of polarity-port
+		databytes[1] = i2cPortBuf[i][REG_POL];
+		databytes[2] = i2cPortBuf[i][REG_POL+1];
+        writeI2Ccmds(i2cPortBuf[i][I2C_ADDR], databytes , 3);
 
-		Wire.beginTransmission(i2cPortBuf[i][I2C_ADDR]);   //direction register
-		Wire.write(REG_DIR);
-		Wire.write(i2cPortBuf[i][REG_DIR]);
-		Wire.write( i2cPortBuf[i][REG_DIR+1]);
-		Wire.endTransmission();
-	}	
+		databytes[0] = REG_DIR;		// register-adress of direction-port
+		databytes[1] = i2cPortBuf[i][REG_DIR];
+		databytes[2] = i2cPortBuf[i][REG_DIR+1];
+		writeI2Ccmds(i2cPortBuf[i][I2C_ADDR], databytes , 3);
+
+	}
+	return testi2c;	
 }
 
-void write_i2c(uint8_t reg, uint16_t pin, uint8_t value)
+
+void i2c_write(uint8_t reg,uint16_t pin,uint8_t value)
 {
-	uint8_t highbyte =0;
-	
-	//extract i2c data
-	uint8_t chipnum = (pin & I2C_CHIPNUMMASK) >> I2C_CHIPNUMOFFSET;
-	uint8_t chipaddr = i2cPortBuf[chipnum][I2C_ADDR];
-	uint16_t bit = pin & I2C_BITMASK;
+
+    uint8_t senddata[2];
+
+    //extract i2c data from pin
+    uint8_t bit = pin & I2C_BITMASK;
+    uint8_t chipnum = (pin & I2C_CHIPMASK) >> I2C_CHIPOFFSET;
+    uint8_t highbyte= (pin & I2C_HLMASK) >> I2C_HLOFFSET;
+    uint8_t addr = i2cPortBuf[chipnum][I2C_ADDR];
+
+    // set or reset bits in buffer
+    if(value == 1)
+    {
+        //check if bit is not already set
+        if(i2cPortBuf[chipnum][reg+highbyte] & (1 << bit))
+            return;
+        
+        //Set bit
+        i2cPortBuf[chipnum][reg+highbyte] |= (1 << bit);           
+    }
+    else
+    {
+        //check if bit is not already cleared
+        if(!(i2cPortBuf[chipnum][reg+highbyte] & (1 << bit)))
+            return;
+        
+        //clear bit
+        i2cPortBuf[chipnum][reg+highbyte] &= ~(1 << bit);  
+    }
     
-	//find out if bit is in high or low byte
-	if(bit & 0xff00)
-		highbyte =1;
-		
-	if( value != 0)
-	{
-		// check if bit is not already set
-		if(	i2cPortBuf[chipnum][reg+highbyte] & bit)
-			return;
-			
-		//set bit in bufer
-		if(highbyte)
-			i2cPortBuf[chipnum][reg] |= (1<< (bit>>8));
-		else
-			i2cPortBuf[chipnum][reg+highbyte] |= (1<< bit);
-	}
-	else
-	{
-		// check if bit is not already set
-		if(	!(i2cPortBuf[chipnum][reg+highbyte] & bit))
-			return;
-			
-		//set bit in bufer
-		if(highbyte)
-			i2cPortBuf[chipnum][reg] &= ~(1<< (bit>>8));
-		else
-			i2cPortBuf[chipnum][reg+highbyte] &= ~(1<< bit);	
-	}
-		
-	//send over i2c
-	Wire.beginTransmission(chipaddr);
-	Wire.write(reg+highbyte);
-	Wire.write(i2cPortBuf[chipnum][reg+highbyte]);
-	Wire.endTransmission();
+    //send over i2c
+    senddata[0] = reg+highbyte;
+    senddata[1] = i2cPortBuf[chipnum][reg+highbyte];
+ 
+    writeI2Ccmds(addr, senddata, 2);   
 }
 
 void setoutput_PCA9555(uint16_t pin)
 {
-	write_i2c(pin,REG_DIR,1);
+    i2c_write(REG_DIR,pin,0);
 }
 
 void setinput_PCA9555(uint16_t pin)
 {
- 	write_i2c(pin,REG_DIR,0);
+    i2c_write(REG_DIR,pin,1);
 }
 
 void write_PCA9555(uint16_t pin, uint8_t value)
 {
-	write_i2c(pin,REG_OUT,value);
+    i2c_write(REG_OUT,pin,value);
 }
 
-
-uint8_t read_PCA9555(uint16_t pin)
-{
-	uint8_t highbyte =0;
-  //extract i2c data
-	uint8_t chipnum = (pin & I2C_CHIPNUMMASK) >> I2C_CHIPNUMOFFSET;
-	uint8_t chipaddr = i2cPortBuf[chipnum][I2C_ADDR];
-	uint16_t bit = pin & I2C_BITMASK;
-    
-	//find out if bit is in high or low byte
-	if(bit & 0xff00)
-		highbyte =1;
-
-	//TODO update buffer from i2c ?
-		
-	// check if bit is set in buffer
-	if(	i2cPortBuf[chipnum][REG_IN+highbyte] & bit)
-		return true;
-	else
-		return false;	
-}
 
 uint8_t read_PCA9555_inputs()
 {
-	uint8_t inputs[2];
-	uint8_t i=0;
-	
-	// inputs are on chip 1 - highbyte
-	Wire.requestFrom(i2cPortBuf[0][I2C_ADDR],(uint8_t) 2);
-	while(Wire.available())    // slave may send less than requested
-	{
-		inputs[i] = Wire.read();    // receive a byte as character
-		i++;
-		if(i > 1)
-			break;
-	}
-	
-	//TODO update internal buffer ?
-	
-	return inputs[1];	
+    // read from i2c chip 0, highbyte (EXTPORT)
+ 
+    uint8_t readbyte =0;
+	writeI2Ccmd(i2cPortBuf[0][I2C_ADDR], REG_IN+1);// set adress of input for external port
+	i2c_start_wait(i2cPortBuf[0][I2C_ADDR] + 1); 		// read device
+	readbyte = i2c_readNak();
+
+
+	i2c_stop();
+
+	return 0xff -readbyte;
 }
+
+

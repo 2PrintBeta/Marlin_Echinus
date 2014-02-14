@@ -2489,47 +2489,51 @@
  #error Oops!  Make sure you have 'Echinus' selected from the 'Tools -> Boards' menu.
 #endif
 
-// masks to encode i2c info into the pins
-#define I2C_PIN 0x200			 //use i2c ?
-#define I2C_CHIPNUMMASK  0x100      //chip number for buffering
-#define I2C_CHIPNUMOFFSET 9
-#define I2C_BITMASK 0xFFFF		     //which bit to set (16 pins available)
-
 #define NUM_OF_I2C_EXPANDERS 2
+// masks to encode i2c info into the pins
+#define I2C_PIN 0x8000		 //use i2c ?
+#define I2C_CHIPMASK 0x4000  //which chip does it use 
+#define I2C_CHIPOFFSET 14
+#define I2C_HLMASK 0x2000    // high or low byte ?
+#define I2C_HLOFFSET 13
+#define I2C_BITMASK 0xFF
 
-//i2c chip num
-#define I2C_CHIP1 (0 << I2C_CHIPNUMOFFSET)
-#define I2C_CHIP2 (1 << I2C_CHIPNUMOFFSET)
+#define I2C_CHIP1 (0 << I2C_CHIPOFFSET)
+#define I2C_CHIP2 (1 << I2C_CHIPOFFSET)
+
+#define I2C_HIGHBYTE (1 << I2C_HLOFFSET)
+#define I2C_LOWBYTE (0<< I2C_HLOFFSET)
 
 #define X_STEP_PIN         28
-#define X_DIR_PIN          I2C_PIN | I2C_CHIP1 | (1 << 5)
-#define X_ENABLE_PIN       I2C_PIN | I2C_CHIP1 | (1 << 4)
+#define X_DIR_PIN          I2C_PIN |I2C_CHIP1|I2C_LOWBYTE |5  // todo I2c
+#define X_ENABLE_PIN       I2C_PIN |I2C_CHIP1|I2C_LOWBYTE |4   // todo I2c
 #define X_MIN_PIN          35
 #define X_MAX_PIN          38
 
 #define Y_STEP_PIN         29
-#define Y_DIR_PIN          I2C_PIN | I2C_CHIP1 | (1 << 1)
-#define Y_ENABLE_PIN       I2C_PIN | I2C_CHIP1 | (1 << 0)
+#define Y_DIR_PIN          I2C_PIN |I2C_CHIP1|I2C_LOWBYTE| 1  // todo I2c
+#define Y_ENABLE_PIN       I2C_PIN |I2C_CHIP1|I2C_LOWBYTE| 0  // todo I2c
 #define Y_MIN_PIN          36
 #define Y_MAX_PIN          39
 
 #define Z_STEP_PIN         30
-#define Z_DIR_PIN          I2C_PIN | I2C_CHIP2 | (1 << 13) 
-#define Z_ENABLE_PIN       I2C_PIN | I2C_CHIP2 | (1 << 12)
+#define Z_DIR_PIN          I2C_PIN|I2C_CHIP2|I2C_HIGHBYTE|5 // todo I2c
+#define Z_ENABLE_PIN       I2C_PIN|I2C_CHIP2|I2C_HIGHBYTE|4  // todo I2c
 #define Z_MIN_PIN          37
 #define Z_MAX_PIN          40
 
 #define E0_STEP_PIN        31
-#define E0_DIR_PIN         I2C_PIN | I2C_CHIP2 | (1 << 9) 
-#define E0_ENABLE_PIN      I2C_PIN | I2C_CHIP2 | (1 << 8)
+#define E0_DIR_PIN         I2C_PIN|I2C_CHIP2|I2C_HIGHBYTE|1  // todo I2c
+#define E0_ENABLE_PIN      I2C_PIN|I2C_CHIP2|I2C_HIGHBYTE|0  // todo I2c
 
 #define E1_STEP_PIN        33
-#define E1_DIR_PIN         I2C_PIN | I2C_CHIP2 | (1 << 5)
-#define E1_ENABLE_PIN      I2C_PIN | I2C_CHIP2 | (1 << 4)
+#define E1_DIR_PIN         I2C_PIN|I2C_CHIP2|I2C_LOWBYTE|5  // todo I2c
+#define E1_ENABLE_PIN      I2C_PIN|I2C_CHIP2|I2C_LOWBYTE|4  // todo I2c
 
 #define E2_STEP_PIN        32
-#define E2_DIR_PIN         I2C_PIN | I2C_CHIP2 | (1 << 1)
-#define E2_ENABLE_PIN      I2C_PIN | I2C_CHIP2 | (1 << 0)
+#define E2_DIR_PIN         I2C_PIN|I2C_CHIP2|I2C_LOWBYTE|1  // todo I2c
+#define E2_ENABLE_PIN      I2C_PIN|I2C_CHIP2|I2C_LOWBYTE|0 // todo I2c
+
 
 #define LED_PIN            42
 #define LED2_PIN           41
@@ -2553,9 +2557,11 @@
 #define HEATER_BED_PIN     13
 
 //echinus has the sd on board
-#define SDSUPPORT
+
+#define SDSUPPORT        
+#define SDEXTRASLOW           
 #define SDPOWER            -1
-#define SDSS				18
+#define SDSS				18  //kann irgendwie nicht stimmen
 #define SDCARDDETECT       -1
 
 // hitachi lcd on echinus
@@ -2571,6 +2577,12 @@
 #define BLEN_A 6
 #define BLEN_B 0
 #define BLEN_C 5
+
+ //encoder rotation values
+ #define encrot0 0
+ #define encrot1 2
+ #define encrot2 3
+ #define encrot3 1
 
 #endif //MOTHERBOARD==42
 
@@ -2638,4 +2650,5 @@
                         _E0_PINS _E1_PINS _E2_PINS             \
                         analogInputToDigitalPin(TEMP_0_PIN), analogInputToDigitalPin(TEMP_1_PIN), analogInputToDigitalPin(TEMP_2_PIN), analogInputToDigitalPin(TEMP_BED_PIN) }
 #endif
+
 
