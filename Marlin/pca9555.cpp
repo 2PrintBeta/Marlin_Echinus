@@ -28,10 +28,11 @@ extern "C" {
 #define REG_DIR 6
 #define I2C_ADDR 8 
 
+
 /** variable, holding the boards PCA9555-data **/
 volatile uint8_t i2cPortBuf[NUM_OF_I2C_EXPANDERS][9] =
 		//	inL, 	inH, 	outL, 	outH, 	polL, 	polH, 	dirL, 	dirH, 	address
-		 {	{0, 	0, 		255, 	0, 		0, 		0, 		0, 		127, 	64},	// Device 1 (L: Mot1+2, H: ExternalPort)
+		 {	{0, 	255, 		255, 	0, 		0, 		0, 		0, 		127, 	64},	// Device 1 (L: Mot1+2, H: ExternalPort)
 			{0, 	0, 		255, 	255, 	0, 		0, 		0, 		0, 		68}};	// Device 2 (L: Mot5+6, H: Mot3+4)
 
 
@@ -61,6 +62,17 @@ uint8_t init_PCA9555 ()
 		writeI2Ccmds(i2cPortBuf[i][I2C_ADDR], databytes , 3);
 
 	}
+
+
+    // enable interrupt on EXTINT
+	DDRE &= ~(1 << 6);
+	PORTE |= (1 << 6);		//pullup external Interrupt
+
+
+	EICRB |= (1 << ISC61); 		// falling edge on external Int6 generates IntRequest INT6
+	EIMSK |= (1 << INT6);
+
+
 	return testi2c;	
 }
 
@@ -81,8 +93,9 @@ void i2c_write(uint8_t reg,uint16_t pin,uint8_t value)
     {
         //check if bit is not already set
         if(i2cPortBuf[chipnum][reg+highbyte] & (1 << bit))
+        {
             return;
-        
+        }        
         //Set bit
         i2cPortBuf[chipnum][reg+highbyte] |= (1 << bit);           
     }
@@ -90,8 +103,9 @@ void i2c_write(uint8_t reg,uint16_t pin,uint8_t value)
     {
         //check if bit is not already cleared
         if(!(i2cPortBuf[chipnum][reg+highbyte] & (1 << bit)))
+        {
             return;
-        
+        }        
         //clear bit
         i2cPortBuf[chipnum][reg+highbyte] &= ~(1 << bit);  
     }
@@ -101,6 +115,8 @@ void i2c_write(uint8_t reg,uint16_t pin,uint8_t value)
     senddata[1] = i2cPortBuf[chipnum][reg+highbyte];
  
     writeI2Ccmds(addr, senddata, 2);   
+    
+
 }
 
 void setoutput_PCA9555(uint16_t pin)
@@ -119,19 +135,20 @@ void write_PCA9555(uint16_t pin, uint8_t value)
 }
 
 
-uint8_t read_PCA9555_inputs()
+ISR(INT6_vect)	// // EXTERNAL INTERRUPT 6 used to get pin change information from PCA9555 
 {
-    // read from i2c chip 0, highbyte (EXTPORT)
- 
-    uint8_t readbyte =0;
+     // read from i2c chip 0, highbyte (EXTPORT)
 	writeI2Ccmd(i2cPortBuf[0][I2C_ADDR], REG_IN+1);// set adress of input for external port
 	i2c_start_wait(i2cPortBuf[0][I2C_ADDR] + 1); 		// read device
-	readbyte = i2c_readNak();
-
-
+	i2cPortBuf[0][REG_IN+1] = i2c_readNak();
 	i2c_stop();
+} // EXTERNAL INTERRUPT 6
 
-	return 0xff -readbyte;
+
+
+uint8_t read_PCA9555_inputs()
+{
+	return 0xff -i2cPortBuf[0][REG_IN+1];
 }
 
 

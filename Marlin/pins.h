@@ -2579,10 +2579,10 @@
 #define BLEN_C 5
 
  //encoder rotation values
- #define encrot0 0
- #define encrot1 2
- #define encrot2 3
- #define encrot3 1
+ #define encrot0 1
+ #define encrot1 3
+ #define encrot2 2
+ #define encrot3 0
 
 #endif //MOTHERBOARD==42
 
