@@ -20,7 +20,7 @@ int absPreheatHPBTemp;
 int absPreheatFanSpeed;
 
 
-#if defined(ULTIPANEL) | defined(ECHINUS_VISION) 
+#ifdef ULTIPANEL
 static float manual_feedrate[] = MANUAL_FEEDRATE;
 #endif // ULTIPANEL
 
@@ -45,7 +45,7 @@ void copy_and_scalePID_d();
 
 /* Different menus */
 static void lcd_status_screen();
-#if defined(ULTIPANEL) | defined(ECHINUS_VISION) 
+#ifdef ULTIPANEL
 extern bool powersupply;
 static void lcd_main_menu();
 static void lcd_tune_menu();
@@ -147,6 +147,9 @@ volatile uint8_t buttons;//Contains the bits of the currently pressed buttons.
 #else
 volatile uint8_t buttons_reprapworld_keypad; // to store the reprapworld_keypad shift register values
 #endif
+#ifdef LCD_HAS_SLOW_BUTTONS
+volatile uint8_t slow_buttons;//Contains the bits of the currently pressed buttons.
+#endif
 uint8_t currentMenuViewOffset;              /* scroll offset in the current menu */
 uint32_t blocking_enc;
 uint8_t lastEncoderBits;
@@ -155,10 +158,6 @@ uint32_t encoderPosition;
 bool lcd_oldcardstatus;
 #endif
 #endif//ULTIPANEL
-
-#ifdef LCD_HAS_SLOW_BUTTONS
-volatile uint8_t slow_buttons;//Contains the bits of the currently pressed buttons.
-#endif
 
 menuFunc_t currentMenu = lcd_status_screen; /* function pointer to the currently active menu */
 uint32_t lcd_next_update_millis;
@@ -189,8 +188,13 @@ static void lcd_status_screen()
         lcd_implementation_status_screen();
         lcd_status_update_delay = 10;   /* redraw the main screen every second. This is easier then trying keep track of all things that change on the screen */
     }
-#if defined(ULTIPANEL) | defined(ECHINUS_VISION) 
+#ifdef ULTIPANEL
+	
+	#ifdef ECHINUS_VISION
+	if(MENU_CLICKED)
+	#else
     if (LCD_CLICKED)
+	#endif
     {
         currentMenu = lcd_main_menu;
         encoderPosition = 0;
@@ -228,7 +232,7 @@ static void lcd_status_screen()
 #endif//ULTIPANEL
 }
 
-#if defined(ULTIPANEL) | defined(ECHINUS_VISION)
+#ifdef ULTIPANEL
 static void lcd_return_to_status()
 {
     encoderPosition = 0;
@@ -237,20 +241,15 @@ static void lcd_return_to_status()
 
 static void lcd_sdcard_pause()
 {
-#ifdef SDSUPPORT
     card.pauseSDPrint();
-#endif
 }
 static void lcd_sdcard_resume()
 {
-#ifdef SDSUPPORT
     card.startFileprint();
-#endif
 }
 
 static void lcd_sdcard_stop()
 {
-#ifdef SDSUPPORT
     card.sdprinting = false;
     card.closefile();
     quickStop();
@@ -259,7 +258,6 @@ static void lcd_sdcard_stop()
         enquecommand_P(PSTR(SD_FINISHED_RELEASECOMMAND));
     }
     autotempShutdown();
-#endif
 }
 
 /* Menu implementation */
@@ -298,6 +296,11 @@ static void lcd_main_menu()
     }
 #endif
     END_MENU();
+	
+	#ifdef ECHINUS_VISION
+	if(MENU_CLICKED)
+		lcd_return_to_status();
+	#endif
 }
 
 #ifdef SDSUPPORT
@@ -359,6 +362,10 @@ static void lcd_babystep_x()
         currentMenu = lcd_tune_menu;
         encoderPosition = 0;
     }
+	#ifdef ECHINUS_VISION
+	if(MENU_CLICKED)
+		lcd_return_to_status();
+	#endif
 }
 
 static void lcd_babystep_y()
@@ -379,6 +386,10 @@ static void lcd_babystep_y()
         currentMenu = lcd_tune_menu;
         encoderPosition = 0;
     }
+	#ifdef ECHINUS_VISION
+	if(MENU_CLICKED)
+		lcd_return_to_status();
+	#endif	
 }
 
 static void lcd_babystep_z()
@@ -399,6 +410,10 @@ static void lcd_babystep_z()
         currentMenu = lcd_tune_menu;
         encoderPosition = 0;
     }
+	#ifdef ECHINUS_VISION
+	if(MENU_CLICKED)
+		lcd_return_to_status();
+	#endif
 }
 #endif //BABYSTEPPING
 
@@ -431,6 +446,11 @@ static void lcd_tune_menu()
      MENU_ITEM(gcode, MSG_FILAMENTCHANGE, PSTR("M600"));
 #endif
     END_MENU();
+	
+	#ifdef ECHINUS_VISION
+	if(MENU_CLICKED)
+		lcd_return_to_status();
+	#endif
 }
 
 static void lcd_prepare_menu()
@@ -458,6 +478,11 @@ static void lcd_prepare_menu()
 #endif
     MENU_ITEM(submenu, MSG_MOVE_AXIS, lcd_move_menu);
     END_MENU();
+	
+	#ifdef ECHINUS_VISION
+	if(MENU_CLICKED)
+		lcd_return_to_status();
+	#endif
 }
 
 float move_menu_scale;
@@ -492,6 +517,11 @@ static void lcd_move_x()
         currentMenu = lcd_move_menu_axis;
         encoderPosition = 0;
     }
+	
+	#ifdef ECHINUS_VISION
+	if(MENU_CLICKED)
+		lcd_return_to_status();
+	#endif
 }
 static void lcd_move_y()
 {
@@ -522,6 +552,11 @@ static void lcd_move_y()
         currentMenu = lcd_move_menu_axis;
         encoderPosition = 0;
     }
+	
+	#ifdef ECHINUS_VISION
+	if(MENU_CLICKED)
+		lcd_return_to_status();
+	#endif
 }
 static void lcd_move_z()
 {
@@ -552,6 +587,11 @@ static void lcd_move_z()
         currentMenu = lcd_move_menu_axis;
         encoderPosition = 0;
     }
+	
+	#ifdef ECHINUS_VISION
+	if(MENU_CLICKED)
+		lcd_return_to_status();
+	#endif
 }
 static void lcd_move_e()
 {
@@ -577,6 +617,11 @@ static void lcd_move_e()
         currentMenu = lcd_move_menu_axis;
         encoderPosition = 0;
     }
+	
+	#ifdef ECHINUS_VISION
+	if(MENU_CLICKED)
+		lcd_return_to_status();
+	#endif
 }
 
 static void lcd_move_menu_axis()
@@ -591,22 +636,42 @@ static void lcd_move_menu_axis()
         MENU_ITEM(submenu, MSG_MOVE_E, lcd_move_e);
     }
     END_MENU();
+	
+	#ifdef ECHINUS_VISION
+	if(MENU_CLICKED)
+		lcd_return_to_status();
+	#endif
 }
 
 static void lcd_move_menu_10mm()
 {
     move_menu_scale = 10.0;
     lcd_move_menu_axis();
+	
+	#ifdef ECHINUS_VISION
+	if(MENU_CLICKED)
+		lcd_return_to_status();
+	#endif
 }
 static void lcd_move_menu_1mm()
 {
     move_menu_scale = 1.0;
     lcd_move_menu_axis();
+	
+	#ifdef ECHINUS_VISION
+	if(MENU_CLICKED)
+		lcd_return_to_status();
+	#endif
 }
 static void lcd_move_menu_01mm()
 {
     move_menu_scale = 0.1;
     lcd_move_menu_axis();
+	
+	#ifdef ECHINUS_VISION
+	if(MENU_CLICKED)
+		lcd_return_to_status();
+	#endif
 }
 
 static void lcd_move_menu()
@@ -618,6 +683,11 @@ static void lcd_move_menu()
     MENU_ITEM(submenu, MSG_MOVE_01MM, lcd_move_menu_01mm);
     //TODO:X,Y,Z,E
     END_MENU();
+	
+	#ifdef ECHINUS_VISION
+	if(MENU_CLICKED)
+		lcd_return_to_status();
+	#endif	
 }
 
 static void lcd_control_menu()
@@ -639,6 +709,11 @@ static void lcd_control_menu()
 #endif
     MENU_ITEM(function, MSG_RESTORE_FAILSAFE, Config_ResetDefault);
     END_MENU();
+
+	#ifdef ECHINUS_VISION
+	if(MENU_CLICKED)
+		lcd_return_to_status();
+	#endif
 }
 
 static void lcd_control_temperature_menu()
@@ -680,6 +755,11 @@ static void lcd_control_temperature_menu()
     MENU_ITEM(submenu, MSG_PREHEAT_PLA_SETTINGS, lcd_control_temperature_preheat_pla_settings_menu);
     MENU_ITEM(submenu, MSG_PREHEAT_ABS_SETTINGS, lcd_control_temperature_preheat_abs_settings_menu);
     END_MENU();
+	
+	#ifdef ECHINUS_VISION
+	if(MENU_CLICKED)
+		lcd_return_to_status();
+	#endif
 }
 
 static void lcd_control_temperature_preheat_pla_settings_menu()
@@ -695,6 +775,11 @@ static void lcd_control_temperature_preheat_pla_settings_menu()
     MENU_ITEM(function, MSG_STORE_EPROM, Config_StoreSettings);
 #endif
     END_MENU();
+	
+	#ifdef ECHINUS_VISION
+	if(MENU_CLICKED)
+		lcd_return_to_status();
+	#endif
 }
 
 static void lcd_control_temperature_preheat_abs_settings_menu()
@@ -710,6 +795,11 @@ static void lcd_control_temperature_preheat_abs_settings_menu()
     MENU_ITEM(function, MSG_STORE_EPROM, Config_StoreSettings);
 #endif
     END_MENU();
+
+	#ifdef ECHINUS_VISION
+	if(MENU_CLICKED)
+		lcd_return_to_status();
+	#endif
 }
 
 static void lcd_control_motion_menu()
@@ -742,6 +832,11 @@ static void lcd_control_motion_menu()
     MENU_ITEM_EDIT(bool, MSG_ENDSTOP_ABORT, &abort_on_endstop_hit);
 #endif
     END_MENU();
+	
+	#ifdef ECHINUS_VISION
+	if(MENU_CLICKED)
+		lcd_return_to_status();
+	#endif
 }
 
 #ifdef DOGLCD
@@ -781,29 +876,29 @@ static void lcd_control_retract_menu()
     MENU_ITEM_EDIT(float52, MSG_CONTROL_RETRACT_RECOVER, &retract_recover_length, 0, 100);
     MENU_ITEM_EDIT(float3, MSG_CONTROL_RETRACT_RECOVERF, &retract_recover_feedrate, 1, 999);
     END_MENU();
+	
+	#ifdef ECHINUS_VISION
+	if(MENU_CLICKED)
+		lcd_return_to_status();
+	#endif
 }
 #endif
 
 #if SDCARDDETECT == -1
 static void lcd_sd_refresh()
 {
-#ifdef SDSUPPORT
     card.initsd();
     currentMenuViewOffset = 0;
-#endif
 }
 #endif
 static void lcd_sd_updir()
 {
-#ifdef SDSUPPORT
     card.updir();
     currentMenuViewOffset = 0;
-#endif
 }
 
 void lcd_sdcard_menu()
 {
-#ifdef SDSUPPORT
     if (lcdDrawUpdate == 0 && LCD_CLICKED == 0)
         return;	// nothing to do (so don't thrash the SD card)
     uint16_t fileCnt = card.getnrfilenames();
@@ -839,7 +934,11 @@ void lcd_sdcard_menu()
         }
     }
     END_MENU();
-#endif
+	
+	#ifdef ECHINUS_VISION
+	if(MENU_CLICKED)
+		lcd_return_to_status();
+	#endif
 }
 
 #define menu_edit_type(_type, _name, _strFunc, scale) \
@@ -990,10 +1089,8 @@ static void menu_action_sdfile(const char* filename, char* longFilename)
 }
 static void menu_action_sddirectory(const char* filename, char* longFilename)
 {
-#ifdef SDSUPPORT
     card.chdir(filename);
     encoderPosition = 0;
-#endif
 }
 static void menu_action_setting_edit_bool(const char* pstr, bool* ptr)
 {
@@ -1034,6 +1131,8 @@ void lcd_init()
      WRITE(SHIFT_OUT,HIGH);
      WRITE(SHIFT_LD,HIGH);
      WRITE(SHIFT_EN,LOW);
+  #elif defined(ECHINUS_VISION)
+	  //Nothing todo
   #else
      #ifdef ULTIPANEL
      #error ULTIPANEL requires an encoder
@@ -1087,7 +1186,7 @@ void lcd_update()
 
     if (lcd_next_update_millis < millis())
     {
-#if defined(ULTIPANEL) | defined(ECHINUS_VISION)
+#ifdef ULTIPANEL
 		#ifdef REPRAPWORLD_KEYPAD
         	if (REPRAPWORLD_KEYPAD_MOVE_Z_UP) {
         		reprapworld_keypad_move_z_up();
@@ -1193,52 +1292,6 @@ void lcd_setcontrast(uint8_t value)
 }
 #endif
 
-#ifdef ECHINUS_VISION
-void lcd_buttons_update()
-{
-    buttons = slow_buttons;
-
-    //manage encoder rotation
-    uint8_t enc=0;
-    if(buttons&EN_A)
-        enc|=(1<<0);
-    if(buttons&EN_B)
-        enc|=(1<<1);
-
-    if(enc != lastEncoderBits)
-    {
-        switch(enc)
-        {
-        case encrot0:
-            if(lastEncoderBits==encrot3)
-                encoderDiff++;
-            else if(lastEncoderBits==encrot1)
-                encoderDiff--;
-            break;
-        case encrot1:
-            if(lastEncoderBits==encrot0)
-                encoderDiff++;
-            else if(lastEncoderBits==encrot2)
-                encoderDiff--;
-            break;
-        case encrot2:
-            if(lastEncoderBits==encrot1)
-                encoderDiff++;
-            else if(lastEncoderBits==encrot3)
-                encoderDiff--;
-            break;
-        case encrot3:
-            if(lastEncoderBits==encrot2)
-                encoderDiff++;
-            else if(lastEncoderBits==encrot0)
-                encoderDiff--;
-            break;
-        }
-    }
-    lastEncoderBits = enc;
-}
-#endif
-
 #ifdef ULTIPANEL
 /* Warning: This function is called from interrupt context */
 void lcd_buttons_update()
@@ -1269,6 +1322,17 @@ void lcd_buttons_update()
       }
       buttons_reprapworld_keypad=~newbutton_reprapworld_keypad; //invert it, because a pressed switch produces a logical 0
 	#endif
+#elif defined(ECHINUS_VISION)
+	buttons = read_PCA9555_inputs();
+	//block buttons for a short time after pressing them
+	if(blocking_enc > millis())
+	{	
+		buttons &= ~EN_C;
+		buttons &=~BTN_MENU;
+		buttons &=~BTN_1;
+		buttons &=~BTN_2;
+		buttons &=~BTN_3;
+	}
 #else   //read it from the shift register
     uint8_t newbutton=0;
     WRITE(SHIFT_LD,LOW);

@@ -2608,9 +2608,13 @@
 #define LCD_PINS_D7 20
 
 // button defines for echinus (offset in the i2c extport pins) 
-#define BLEN_A 6
-#define BLEN_B 0
-#define BLEN_C 5
+#define BLEN_A 6	//encoder 
+#define BLEN_B 0	//encoder
+#define BLEN_C 5	//encoder click
+#define BLEN_MENU 4  //menu button
+#define BLEN_1 1 	//button 1
+#define BLEN_2	2	//button 2
+#define BLEN_3	3	//button 3
 
  //encoder rotation values
  #define encrot0 1

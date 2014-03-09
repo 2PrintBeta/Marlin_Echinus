@@ -136,14 +136,6 @@ extern volatile uint16_t buttons;  //an extended version of the last checked but
 
 #endif //ULTIPANEL
 
-#ifdef ECHINUS_VISION
-	#define EN_B (1<<BLEN_B) 
-	#define EN_A (1<<BLEN_A)
-	#define EN_C (1<<BLEN_C) 
-	#define LCD_CLICKED (buttons&EN_C)
-#endif
-
-
 ////////////////////////////////////
 // Create LCD class instance and chipset-specific information
 #if defined(LCD_I2C_TYPE_PCF8575)
@@ -210,11 +202,7 @@ extern volatile uint16_t buttons;  //an extended version of the last checked but
     #include <LiquidCrystal.h>
     #define LCD_CLASS LiquidCrystal
   #endif  
-  #if defined(LCD_PIN_RW)
-	LCD_CLASS lcd(LCD_PINS_RS, LCD_PIN_RW, LCD_PINS_ENABLE, LCD_PINS_D4, LCD_PINS_D5,LCD_PINS_D6,LCD_PINS_D7);  //RS,RW,Enable,D4,D5,D6,D7
-  #else
   LCD_CLASS lcd(LCD_PINS_RS, LCD_PINS_ENABLE, LCD_PINS_D4, LCD_PINS_D5,LCD_PINS_D6,LCD_PINS_D7);  //RS,Enable,D4,D5,D6,D7
-#endif
 #endif
 
 /* Custom characters defined in the first 8 characters of the LCD */
@@ -346,6 +334,7 @@ static void lcd_implementation_init()
     lcd.createChar(LCD_STR_FOLDER[0], folder);
     lcd.createChar(LCD_STR_FEEDRATE[0], feedrate);
     lcd.createChar(LCD_STR_CLOCK[0], clock);
+    lcd.clear();
 }
 static void lcd_implementation_clear()
 {
@@ -782,8 +771,8 @@ extern uint32_t blocking_enc;
 
 static uint8_t lcd_implementation_read_slow_buttons()
 {
-  uint8_t slow_buttons;
   #ifdef LCD_I2C_TYPE_MCP23017
+  uint8_t slow_buttons;
     // Reading these buttons this is likely to be too slow to call inside interrupt context
     // so they are called during normal lcd_update
     slow_buttons = lcd.readButtons() << B_I2C_BTN_OFFSET; 
@@ -794,13 +783,8 @@ static uint8_t lcd_implementation_read_slow_buttons()
        }
     }
     #endif
-  #endif
-
-  #ifdef ECHINUS_VISION
-	slow_buttons = read_PCA9555_inputs();
-  #endif
-
   return slow_buttons; 
+  #endif
 }
 #endif
 

@@ -621,6 +621,12 @@ const bool Z_MAX_ENDSTOP_INVERTING = true; // set to true to invert the logic of
    //#define NEWPANEL
 #endif
 
+#ifdef ECHINUS_VISION
+#define ULTRA_LCD  //general lcd support, also 16x2
+#define LCD_WIDTH 20
+#define LCD_HEIGHT 4
+#define ULTIPANEL  //everything uses the ULTIPANEL define, so set it too, to not dublicate too much
+#endif
 
 #ifdef ULTIPANEL
 //  #define NEWPANEL  //enable this if you have a click-encoder panel
@@ -652,12 +658,7 @@ const bool Z_MAX_ENDSTOP_INVERTING = true; // set to true to invert the logic of
 # endif
 #endif
 
-#ifdef ECHINUS_VISION
-#define ULTRA_LCD  //general lcd support, also 16x2
-#define LCD_WIDTH 20
-#define LCD_HEIGHT 4
-#define LCD_HAS_SLOW_BUTTONS
-#endif
+
 
 // Increase the FAN pwm frequency. Removes the PWM noise but increases heating in the FET/Arduino
 //#define FAST_PWM_FAN

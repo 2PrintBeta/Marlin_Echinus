@@ -25,7 +25,7 @@
   #define LCD_UPDATE_INTERVAL 100
   #define LCD_TIMEOUT_TO_STATUS 15000
 
-  #if defined(ULTIPANEL) | defined(ECHINUS_VISION)
+  #ifdef ULTIPANEL
   void lcd_buttons_update();
   extern volatile uint8_t buttons;  //the last checked buttons in a bit array.
   #ifdef REPRAPWORLD_KEYPAD
@@ -71,8 +71,18 @@
   	  #define REPRAPWORLD_KEYPAD_MOVE_Y_UP (buttons_reprapworld_keypad&EN_REPRAPWORLD_KEYPAD_UP)
   	  #define REPRAPWORLD_KEYPAD_MOVE_HOME (buttons_reprapworld_keypad&EN_REPRAPWORLD_KEYPAD_MIDDLE)
     #endif //REPRAPWORLD_KEYPAD
+	
   #elif defined(ECHINUS_VISION)
-    #define LCD_CLICKED (buttons&EN_C)
+	#define EN_A (1<<BLEN_A)
+	#define EN_B (1<<BLEN_B)
+    #define EN_C (1<<BLEN_C)
+	#define BTN_MENU (1<<BLEN_MENU)
+	#define BTN_1 (1<<BLEN_1)
+	#define BTN_2 (1<<BLEN_2)
+	#define BTN_3 (1<<BLEN_3)
+	
+	#define LCD_CLICKED (buttons&EN_C)	
+	#define MENU_CLICKED (buttons&BTN_MENU)
   #else
     //atomic, do not change
     #define B_LE (1<<BL_LE)
