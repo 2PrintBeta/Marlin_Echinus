@@ -26,7 +26,7 @@ int writeI2Ccmd(unsigned char addr, unsigned char data);
  Write Array of Bytes to the I2C device, 
 
 @param   	addr 			I2C -Adresse mit Bit 0 = 0 (Write)
-@param    	data			Array mit Daten f�r Versand
+@param    	data			Array mit Daten f?r Versand
 @param    	noOfDatabytes	Anzahl der Datenbytes in Array
 
  Return:  0 = No Error ; 1 = Error

@@ -197,9 +197,10 @@ extern volatile uint16_t buttons;  //an extended version of the last checked but
   LCD_CLASS lcd(SR_DATA_PIN, SR_CLK_PIN);
 
 #elif defined(ECHINUS_VISION)
-  #include "lcd_ks0073.h"
   #include "pca9555.h"
-  LcdKS0073 lcd;
+  #include <LiquidCrystal.h>
+  #define LCD_CLASS LiquidCrystal
+  LCD_CLASS lcd(LCD_PINS_RS, LCD_PIN_RW, LCD_PINS_ENABLE, LCD_PINS_D4, LCD_PINS_D5,LCD_PINS_D6,LCD_PINS_D7);  //RS,RW,Enable,D4,D5,D6,D7
 #else
   // Standard directly connected LCD implementations
   #if LANGUAGE_CHOICE == 6
@@ -210,7 +211,7 @@ extern volatile uint16_t buttons;  //an extended version of the last checked but
     #define LCD_CLASS LiquidCrystal
   #endif  
   #if defined(LCD_PIN_RW)
-	LCD_CLASS lcd(LCD_PINS_RS, LCD_PINS_ENABLE,LCD_PIN_RW, LCD_PINS_D4, LCD_PINS_D5,LCD_PINS_D6,LCD_PINS_D7);  //RS,RW,Enable,D4,D5,D6,D7
+	LCD_CLASS lcd(LCD_PINS_RS, LCD_PIN_RW, LCD_PINS_ENABLE, LCD_PINS_D4, LCD_PINS_D5,LCD_PINS_D6,LCD_PINS_D7);  //RS,RW,Enable,D4,D5,D6,D7
   #else
   LCD_CLASS lcd(LCD_PINS_RS, LCD_PINS_ENABLE, LCD_PINS_D4, LCD_PINS_D5,LCD_PINS_D6,LCD_PINS_D7);  //RS,Enable,D4,D5,D6,D7
 #endif
