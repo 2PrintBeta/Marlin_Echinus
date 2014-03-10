@@ -263,8 +263,6 @@ static void lcd_sdcard_stop()
 /* Menu implementation */
 static void lcd_main_menu()
 {
-SERIAL_ECHOLNPGM("lcd_main_menu");
-
     START_MENU();
     MENU_ITEM(back, MSG_WATCH, lcd_status_screen);
     if (movesplanned() || IS_SD_PRINTING)
