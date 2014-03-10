@@ -20,7 +20,7 @@
 // 11 Dutch
 
 #ifndef LANGUAGE_CHOICE
-	#define LANGUAGE_CHOICE 1  // Pick your language from the list above
+	#define LANGUAGE_CHOICE 1 // Pick your language from the list above
 #endif
 
 #define PROTOCOL_VERSION "1.0"
@@ -669,9 +669,9 @@
 	#define MSG_PID_D            "PID-D"
 	#define MSG_PID_C            "PID-C"
 	#define MSG_ACC              "Acc"
-	#define MSG_VXY_JERK         "Vxy-jerk"
-	#define MSG_VZ_JERK          "Vz-jerk"
-	#define MSG_VE_JERK          "Ve-jerk"
+	#define MSG_VXY_JERK         "Vxy-ruck"
+	#define MSG_VZ_JERK          "Vz-ruck"
+	#define MSG_VE_JERK          "Ve-ruck"
 	#define MSG_VMAX             "Vmax "
 	#define MSG_X                "x"
 	#define MSG_Y                "y"
@@ -717,7 +717,7 @@
 	#define MSG_AUTORETRACT      "AutoRetr."
 	#define MSG_FILAMENTCHANGE "Filament wechseln"
 	#define MSG_INIT_SDCARD "Init. SD-Card"
-	#define MSG_CNG_SDCARD "Change SD-Card"
+	#define MSG_CNG_SDCARD "Wechsle SD-Card"
 	#define MSG_ZPROBE_OUT "Z probe out. bed"
 	#define MSG_POSITION_UNKNOWN "Home X/Y before Z"
 	#define MSG_ZPROBE_ZOFFSET "Z Offset"
@@ -725,7 +725,6 @@
 	#define MSG_BABYSTEP_Y "Babystep Y"
 	#define MSG_BABYSTEP_Z "Babystep Z"
 	#define MSG_ENDSTOP_ABORT "Endstop abort"
-	#define MSG_CONTRAST "Contrast"
 
 // Serial Console Messages
 

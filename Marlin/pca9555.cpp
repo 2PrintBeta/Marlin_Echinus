@@ -144,11 +144,9 @@ ISR(INT6_vect)	// // EXTERNAL INTERRUPT 6 used to get pin change information fro
 	i2c_stop();
 } // EXTERNAL INTERRUPT 6
 
-
-
 uint8_t read_PCA9555_inputs()
 {
-	return 0xff -i2cPortBuf[0][REG_IN+1];
+    return 0xff -i2cPortBuf[0][REG_IN+1];
 }
 
 

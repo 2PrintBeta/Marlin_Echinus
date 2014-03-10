@@ -19,7 +19,7 @@ extern volatile uint16_t buttons;  //an extended version of the last checked but
 // macro name. The mapping is independent of whether the button is directly connected or 
 // via a shift/i2c register.
 
-#ifdef ULTIPANEL 
+#if defined(ULTIPANEL) && !defined(ECHINUS_VISION) 
 // All UltiPanels might have an encoder - so this is always be mapped onto first two bits
 #define BLEN_B 1
 #define BLEN_A 0
@@ -101,7 +101,6 @@ extern volatile uint16_t buttons;  //an extended version of the last checked but
 
 #elif defined(NEWPANEL)
   #define LCD_CLICKED (buttons&EN_C)
-  
 #else // old style ULTIPANEL
   //bits in the shift register that carry the buttons for:
   // left up center down right red(stop)

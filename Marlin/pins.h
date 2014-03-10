@@ -2591,11 +2591,10 @@
 #define HEATER_BED_PIN     13
 
 //echinus has the sd on board
-
-#define SDSUPPORT        
+     
 #define SDEXTRASLOW           
 #define SDPOWER            -1
-#define SDSS				18  //kann irgendwie nicht stimmen
+#define SDSS				18  
 #define SDCARDDETECT       -1
 
 // hitachi lcd on echinus
@@ -2612,9 +2611,9 @@
 #define BLEN_B 0	//encoder
 #define BLEN_C 5	//encoder click
 #define BLEN_MENU 4  //menu button
-#define BLEN_1 1 	//button 1
+#define BLEN_1 3 	//button 1
 #define BLEN_2	2	//button 2
-#define BLEN_3	3	//button 3
+#define BLEN_3	1	//button 3
 
  //encoder rotation values
  #define encrot0 1

@@ -83,6 +83,7 @@
 	
 	#define LCD_CLICKED (buttons&EN_C)	
 	#define MENU_CLICKED (buttons&BTN_MENU)
+    #define BACK_CLICKED (buttons&BTN_1)
   #else
     //atomic, do not change
     #define B_LE (1<<BL_LE)
