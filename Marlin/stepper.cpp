@@ -358,11 +358,11 @@ ISR(TIMER1_COMPA_vect)
       #ifdef DUAL_X_CARRIAGE
         if (extruder_duplication_enabled){
           WRITE(X_DIR_PIN, INVERT_X_DIR);
-          WRITE(X2_DIR_PIN, INVERT_X_DIR);
+          WRITE(X2_DIR_PIN, INVERT_X2_DIR);
         }
         else{
           if (current_block->active_extruder != 0)
-            WRITE(X2_DIR_PIN, INVERT_X_DIR);
+            WRITE(X2_DIR_PIN, INVERT_X2_DIR);
           else
             WRITE(X_DIR_PIN, INVERT_X_DIR);
         }
@@ -375,11 +375,11 @@ ISR(TIMER1_COMPA_vect)
       #ifdef DUAL_X_CARRIAGE
         if (extruder_duplication_enabled){
           WRITE(X_DIR_PIN, !INVERT_X_DIR);
-          WRITE(X2_DIR_PIN, !INVERT_X_DIR);
+          WRITE(X2_DIR_PIN, !INVERT_X2_DIR);
         }
         else{
           if (current_block->active_extruder != 0)
-            WRITE(X2_DIR_PIN, !INVERT_X_DIR);
+            WRITE(X2_DIR_PIN, !INVERT_X2_DIR);
           else
             WRITE(X_DIR_PIN, !INVERT_X_DIR);
         }
@@ -1053,7 +1053,7 @@ void babystep(const uint8_t axis,const bool direction)
     //setup new step
     WRITE(X_DIR_PIN,(INVERT_X_DIR)^direction);
     #ifdef DUAL_X_CARRIAGE
-      WRITE(X2_DIR_PIN,(INVERT_X_DIR)^direction);
+      WRITE(X2_DIR_PIN,(INVERT_X2_DIR)^direction);
     #endif
     
     //perform step 

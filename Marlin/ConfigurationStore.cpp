@@ -40,7 +40,7 @@ void _EEPROM_readData(int &pos, uint8_t* value, uint8_t size)
 #ifdef DELTA
 #define EEPROM_VERSION "V11"
 #else
-#define EEPROM_VERSION "V10"
+#define EEPROM_VERSION "V11"
 #endif
 
 #ifdef EEPROM_SETTINGS
@@ -93,6 +93,11 @@ void Config_StoreSettings()
     int lcd_contrast = 32;
   #endif
   EEPROM_WRITE_VAR(i,lcd_contrast);
+  #ifdef DUAL_X_CARRIAGE
+  EEPROM_WRITE_VAR(i,extruder_offset[X_AXIS][1]);
+  EEPROM_WRITE_VAR(i,extruder_offset[Y_AXIS][1]);
+  EEPROM_WRITE_VAR(i,extruder_offset[Z_AXIS][1]);  
+  #endif
   char ver2[4]=EEPROM_VERSION;
   i=EEPROM_OFFSET;
   EEPROM_WRITE_VAR(i,ver2); // validate data
@@ -181,6 +186,15 @@ void Config_PrintSettings()
     SERIAL_ECHOPAIR(" D" ,unscalePID_d(Kd));
     SERIAL_ECHOLN(""); 
 #endif
+#ifdef DUAL_X_CARRIAGE
+    SERIAL_ECHO_START;
+    SERIAL_ECHOLNPGM("EXTRUDER OFFSET settings:");
+    SERIAL_ECHO_START;
+    SERIAL_ECHOPAIR("   M218 T1 X",extruder_offset[X_AXIS][1]); 
+    SERIAL_ECHOPAIR(" Y" ,extruder_offset[Y_AXIS][1]); 
+    SERIAL_ECHOPAIR(" Z" ,extruder_offset[Z_AXIS][1]);
+    SERIAL_ECHOLN(""); 
+#endif
 } 
 #endif
 
@@ -240,7 +254,11 @@ void Config_RetrieveSettings()
         int lcd_contrast;
         #endif
         EEPROM_READ_VAR(i,lcd_contrast);
-
+        #ifdef DUAL_X_CARRIAGE
+        EEPROM_READ_VAR(i,extruder_offset[X_AXIS][1]);
+        EEPROM_READ_VAR(i,extruder_offset[Y_AXIS][1]);    
+        EEPROM_READ_VAR(i,extruder_offset[Z_AXIS][1]);
+        #endif
 		// Call updatePID (similar to when we have processed M301)
 		updatePID();
         SERIAL_ECHO_START;
@@ -300,6 +318,11 @@ void Config_ResetDefault()
 #endif
 #ifdef DOGLCD
     lcd_contrast = DEFAULT_LCD_CONTRAST;
+#endif
+#ifdef DUAL_X_CARRIAGE
+    extruder_offset[X_AXIS][1] = EXTRUDER_OFFSET_X1;
+    extruder_offset[Y_AXIS][1] = EXTRUDER_OFFSET_Y1;
+    extruder_offset[Z_AXIS][1] = EXTRUDER_OFFSET_Z1;
 #endif
 #ifdef PIDTEMP
     Kp = DEFAULT_Kp;

@@ -2539,34 +2539,34 @@
 #define I2C_LOWBYTE (0<< I2C_HLOFFSET)
 
 #define X_STEP_PIN         28
-#define X_DIR_PIN          I2C_PIN |I2C_CHIP1|I2C_LOWBYTE |5  // todo I2c
-#define X_ENABLE_PIN       I2C_PIN |I2C_CHIP1|I2C_LOWBYTE |4   // todo I2c
+#define X_DIR_PIN          I2C_PIN |I2C_CHIP1|I2C_LOWBYTE |5  
+#define X_ENABLE_PIN       I2C_PIN |I2C_CHIP1|I2C_LOWBYTE |4   
 #define X_MIN_PIN          35
 #define X_MAX_PIN          38
 
+#define X2_STEP_PIN        33
+#define X2_DIR_PIN         I2C_PIN|I2C_CHIP2|I2C_LOWBYTE|5  
+#define X2_ENABLE_PIN      I2C_PIN|I2C_CHIP2|I2C_LOWBYTE|4  
+
 #define Y_STEP_PIN         29
-#define Y_DIR_PIN          I2C_PIN |I2C_CHIP1|I2C_LOWBYTE| 1  // todo I2c
-#define Y_ENABLE_PIN       I2C_PIN |I2C_CHIP1|I2C_LOWBYTE| 0  // todo I2c
+#define Y_DIR_PIN          I2C_PIN |I2C_CHIP1|I2C_LOWBYTE| 1 
+#define Y_ENABLE_PIN       I2C_PIN |I2C_CHIP1|I2C_LOWBYTE| 0  
 #define Y_MIN_PIN          36
 #define Y_MAX_PIN          39
 
 #define Z_STEP_PIN         30
-#define Z_DIR_PIN          I2C_PIN|I2C_CHIP2|I2C_HIGHBYTE|5 // todo I2c
-#define Z_ENABLE_PIN       I2C_PIN|I2C_CHIP2|I2C_HIGHBYTE|4  // todo I2c
+#define Z_DIR_PIN          I2C_PIN|I2C_CHIP2|I2C_HIGHBYTE|5
+#define Z_ENABLE_PIN       I2C_PIN|I2C_CHIP2|I2C_HIGHBYTE|4 
 #define Z_MIN_PIN          37
 #define Z_MAX_PIN          40
 
 #define E0_STEP_PIN        31
-#define E0_DIR_PIN         I2C_PIN|I2C_CHIP2|I2C_HIGHBYTE|1  // todo I2c
-#define E0_ENABLE_PIN      I2C_PIN|I2C_CHIP2|I2C_HIGHBYTE|0  // todo I2c
+#define E0_DIR_PIN         I2C_PIN|I2C_CHIP2|I2C_HIGHBYTE|1 
+#define E0_ENABLE_PIN      I2C_PIN|I2C_CHIP2|I2C_HIGHBYTE|0  
 
-#define E1_STEP_PIN        33
-#define E1_DIR_PIN         I2C_PIN|I2C_CHIP2|I2C_LOWBYTE|5  // todo I2c
-#define E1_ENABLE_PIN      I2C_PIN|I2C_CHIP2|I2C_LOWBYTE|4  // todo I2c
-
-#define E2_STEP_PIN        32
-#define E2_DIR_PIN         I2C_PIN|I2C_CHIP2|I2C_LOWBYTE|1  // todo I2c
-#define E2_ENABLE_PIN      I2C_PIN|I2C_CHIP2|I2C_LOWBYTE|0 // todo I2c
+#define E1_STEP_PIN        32
+#define E1_DIR_PIN         I2C_PIN|I2C_CHIP2|I2C_LOWBYTE|1 
+#define E1_ENABLE_PIN      I2C_PIN|I2C_CHIP2|I2C_LOWBYTE|0 
 
 
 #define LED_PIN            42

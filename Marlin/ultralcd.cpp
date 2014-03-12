@@ -154,6 +154,7 @@ uint8_t currentMenuViewOffset;              /* scroll offset in the current menu
 uint32_t blocking_enc=0;
 uint8_t lastEncoderBits;
 uint32_t encoderPosition;
+uint8_t inEditMenu=0;
 #if (SDCARDDETECT > 0)
 bool lcd_oldcardstatus;
 #endif
@@ -487,6 +488,7 @@ static void lcd_tune_menu()
     {
         lcd_quick_feedback();
         currentMenu = lcd_main_menu;
+        encoderPosition = 0;
     }
 	#endif
 }
@@ -527,6 +529,7 @@ static void lcd_prepare_menu()
     {
         lcd_quick_feedback();
         currentMenu = lcd_main_menu;
+        encoderPosition = 0;
     }
 	#endif
 }
@@ -729,6 +732,7 @@ static void lcd_move_menu_axis()
     {
         lcd_quick_feedback();
         currentMenu = lcd_move_menu;
+        encoderPosition = 0;
     }
 	#endif
 }
@@ -748,6 +752,7 @@ static void lcd_move_menu_10mm()
     {
         lcd_quick_feedback();
         currentMenu = lcd_move_menu;
+        encoderPosition = 0;
     }
 	#endif
 }
@@ -766,6 +771,7 @@ static void lcd_move_menu_1mm()
     {
         lcd_quick_feedback();
         currentMenu = lcd_move_menu;
+        encoderPosition = 0;
     }
 	#endif
 }
@@ -784,6 +790,7 @@ static void lcd_move_menu_01mm()
     {
         lcd_quick_feedback();
         currentMenu = lcd_move_menu;
+        encoderPosition = 0;
     }
 	#endif
 }
@@ -808,6 +815,7 @@ static void lcd_move_menu()
     {
         lcd_quick_feedback();
         currentMenu = lcd_prepare_menu;
+        encoderPosition = 0;
     }
 	#endif	
 }
@@ -842,6 +850,7 @@ static void lcd_control_menu()
     {
         lcd_quick_feedback();
         currentMenu = lcd_main_menu;
+        encoderPosition = 0;
     }
 	#endif
 }
@@ -896,6 +905,7 @@ static void lcd_control_temperature_menu()
     {
         lcd_quick_feedback();
         currentMenu = lcd_control_menu;
+        encoderPosition = 0;
     }
 	#endif
 }
@@ -924,6 +934,7 @@ static void lcd_control_temperature_preheat_pla_settings_menu()
     {
         lcd_quick_feedback();
         currentMenu = lcd_control_temperature_menu;
+        encoderPosition = 0;
     }
 	#endif
 }
@@ -952,6 +963,7 @@ static void lcd_control_temperature_preheat_abs_settings_menu()
     {
         lcd_quick_feedback();
         currentMenu = lcd_control_temperature_menu;
+        encoderPosition = 0;
     }
 	#endif
 }
@@ -982,6 +994,11 @@ static void lcd_control_motion_menu()
     MENU_ITEM_EDIT(float52, MSG_YSTEPS, &axis_steps_per_unit[Y_AXIS], 5, 9999);
     MENU_ITEM_EDIT(float51, MSG_ZSTEPS, &axis_steps_per_unit[Z_AXIS], 5, 9999);
     MENU_ITEM_EDIT(float51, MSG_ESTEPS, &axis_steps_per_unit[E_AXIS], 5, 9999);
+#ifdef DUAL_X_CARRIAGE
+    MENU_ITEM_EDIT(float52, MSG_EXTRUDER_OFFSET_X, &extruder_offset[X_AXIS][1], 0, 990);
+    MENU_ITEM_EDIT(float52, MSG_EXTRUDER_OFFSET_Y, &extruder_offset[Y_AXIS][1], 0, 990);
+    MENU_ITEM_EDIT(float52, MSG_EXTRUDER_OFFSET_Z, &extruder_offset[Z_AXIS][1], 0, 990);
+#endif
 #ifdef ABORT_ON_ENDSTOP_HIT_FEATURE_ENABLED
     MENU_ITEM_EDIT(bool, MSG_ENDSTOP_ABORT, &abort_on_endstop_hit);
 #endif
@@ -997,6 +1014,7 @@ static void lcd_control_motion_menu()
     {
         lcd_quick_feedback();
         currentMenu = lcd_control_menu;
+        encoderPosition = 0;
     }
 	#endif
 }
@@ -1049,6 +1067,7 @@ static void lcd_control_retract_menu()
     {
         lcd_quick_feedback();
         currentMenu = lcd_control_menu;
+        encoderPosition = 0;
     }
 	#endif
 }
@@ -1115,6 +1134,7 @@ void lcd_sdcard_menu()
     {
         lcd_quick_feedback();
         currentMenu = lcd_main_menu;
+        encoderPosition = 0;
     }
 	#endif
 }
@@ -1134,6 +1154,7 @@ void lcd_sdcard_menu()
             lcd_quick_feedback(); \
             currentMenu = prevMenu; \
             encoderPosition = prevEncoderPosition; \
+            inEditMenu = 0; \
         } \
     } \
     void menu_edit_callback_ ## _name () \
@@ -1151,6 +1172,7 @@ void lcd_sdcard_menu()
             currentMenu = prevMenu; \
             encoderPosition = prevEncoderPosition; \
             (*callbackFunc)();\
+            inEditMenu =0; \
         } \
     } \
     static void menu_action_setting_edit_ ## _name (const char* pstr, _type* ptr, _type minValue, _type maxValue) \
@@ -1166,6 +1188,7 @@ void lcd_sdcard_menu()
         minEditValue = minValue * scale; \
         maxEditValue = maxValue * scale; \
         encoderPosition = (*ptr) * scale; \
+        inEditMenu =1; \
     }\
     static void menu_action_setting_edit_callback_ ## _name (const char* pstr, _type* ptr, _type minValue, _type maxValue, menuFunc_t callback) \
     { \
@@ -1181,6 +1204,7 @@ void lcd_sdcard_menu()
         maxEditValue = maxValue * scale; \
         encoderPosition = (*ptr) * scale; \
         callbackFunc = callback;\
+        inEditMenu = 1; \
     }
 menu_edit_type(int, int3, itostr3, 1)
 menu_edit_type(float, float3, ftostr3, 1)
@@ -1391,17 +1415,36 @@ void lcd_update()
         if (abs(encoderDiff) >= ENCODER_PULSES_PER_STEP)
         {
             lcdDrawUpdate = 1;
+#ifdef ECHINUS_VISION 
+            if((buttons & BTN_2) && (inEditMenu ==1 )) //encoderpos * 10
+            {
+                encoderPosition += (encoderDiff / ENCODER_PULSES_PER_STEP)*10;
+            }
+            else if((buttons & BTN_3) && (inEditMenu == 1))  // encoderpos *100
+            {
+                encoderPosition += (encoderDiff / ENCODER_PULSES_PER_STEP)*100;
+            }
+            else
+            {
+             encoderPosition += encoderDiff / ENCODER_PULSES_PER_STEP;   
+            }
+#else
             encoderPosition += encoderDiff / ENCODER_PULSES_PER_STEP;
+#endif
+            
             encoderDiff = 0;
             timeoutToStatus = millis() + LCD_TIMEOUT_TO_STATUS;
         }
         if (LCD_CLICKED) 
             timeoutToStatus = millis() + LCD_TIMEOUT_TO_STATUS;
 
-#ifdef ECHINUS VISION
+#ifdef ECHINUS_VISION
         if (MENU_CLICKED)
              timeoutToStatus = millis() + LCD_TIMEOUT_TO_STATUS;
-#endif    
+
+        if(BACK_CLICKED)
+            timeoutToStatus = millis() + LCD_TIMEOUT_TO_STATUS;
+#endif
 #endif//ULTIPANEL
 
 #ifdef DOGLCD        // Changes due to different driver architecture of the DOGM display
@@ -1425,7 +1468,7 @@ void lcd_update()
         lcd_implementation_update_indicators();
 #endif
 
-#if defined(ULTIPANEL) && !defined(ECHINUS_VISION)
+#if defined(ULTIPANEL)
         if(timeoutToStatus < millis() && currentMenu != lcd_status_screen)
         {
             lcd_return_to_status();

@@ -220,7 +220,9 @@ float zprobe_zoffset;
 #endif
 float extruder_offset[NUM_EXTRUDER_OFFSETS][EXTRUDERS] = {
 #if defined(EXTRUDER_OFFSET_X) && defined(EXTRUDER_OFFSET_Y)
-  EXTRUDER_OFFSET_X, EXTRUDER_OFFSET_Y
+  {EXTRUDER_OFFSET_X0,EXTRUDER_OFFSET_X1}, {EXTRUDER_OFFSET_Y0,EXTRUDER_OFFSET_Y1}
+#elif defined(EXTRUDER_OFFSET_X) && defined(EXTRUDER_OFFSET_Y) && defined(EXTRUDER_OFFSET_Z)
+  {EXTRUDER_OFFSET_X0,EXTRUDER_OFFSET_X1}, {EXTRUDER_OFFSET_Y0,EXTRUDER_OFFSET_Y1}, {EXTRUDER_OFFSET_Z0,EXTRUDER_OFFSET_Z1}
 #endif
 };
 #endif
@@ -1033,7 +1035,9 @@ static void homeaxis(int axis) {
     int axis_home_dir = home_dir(axis);
 #ifdef DUAL_X_CARRIAGE
     if (axis == X_AXIS)
-      axis_home_dir = x_home_dir(active_extruder);
+    {
+       axis_home_dir = x_home_dir(active_extruder);
+    }
 #endif
 
     current_position[axis] = 0;
@@ -3071,12 +3075,10 @@ void ClearToSend()
 
 void get_coordinates()
 {
-  bool seen[4]={false,false,false,false};
   for(int8_t i=0; i < NUM_AXIS; i++) {
     if(code_seen(axis_codes[i]))
     {
       destination[i] = (float)code_value() + (axis_relative_modes[i] || relative_mode)*current_position[i];
-      seen[i]=true;
     }
     else destination[i] = current_position[i]; //Are these else lines really needed?
   }

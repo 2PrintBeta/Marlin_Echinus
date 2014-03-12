@@ -169,6 +169,9 @@
 	#define MSG_BABYSTEP_Y "Babystep Y"
 	#define MSG_BABYSTEP_Z "Babystep Z"
 	#define MSG_ENDSTOP_ABORT "Endstop abort"
+    #define MSG_EXTRUDER_OFFSET_X "Offset X"
+    #define MSG_EXTRUDER_OFFSET_Y "Offset Y"
+    #define MSG_EXTRUDER_OFFSET_Z "Offset Z"
 
 // Serial Console Messages
 

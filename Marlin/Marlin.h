@@ -240,7 +240,9 @@ extern unsigned long stoptime;
 
 // Handling multiple extruders pins
 extern uint8_t active_extruder;
-
+#ifdef DUAL_X_CARRIAGE
+extern float extruder_offset[][EXTRUDERS];
+#endif
 #ifdef DIGIPOT_I2C
 extern void digipot_i2c_set_current( int channel, float current );
 extern void digipot_i2c_init();
