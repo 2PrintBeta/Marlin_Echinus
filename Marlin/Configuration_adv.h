@@ -205,8 +205,8 @@
 #define EXTRUDER1_Z_OFFSET 0.0           // z offset relative to extruder 0
 
 // Default settings in "Auto-park Mode"
-#define TOOLCHANGE_PARK_ZLIFT   0      // the distance to raise Z axis when parking an extruder
-#define TOOLCHANGE_UNPARK_ZLIFT 0        // the distance to raise Z axis when unparking an extruder
+#define TOOLCHANGE_PARK_ZLIFT   1      // the distance to raise Z axis when parking an extruder
+#define TOOLCHANGE_UNPARK_ZLIFT 1        // the distance to raise Z axis when unparking an extruder
 
 // Default x offset in duplication mode (typically set to half print bed width)
 #define DEFAULT_DUPLICATION_X_OFFSET 100

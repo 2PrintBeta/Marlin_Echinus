@@ -544,5 +544,5 @@ echinus.build.mcu=atmega128
 echinus.build.f_cpu=14745600L
 echinus.build.core=arduino
 echinus.build.variant=echinus
-
+echinus.upload.using=avrdude
 

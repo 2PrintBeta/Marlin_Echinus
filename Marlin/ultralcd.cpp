@@ -550,9 +550,9 @@ static void lcd_move_x()
         encoderPosition = 0;
         #ifdef DELTA
         calculate_delta(current_position);
-        plan_buffer_line(delta[X_AXIS], delta[Y_AXIS], delta[Z_AXIS], current_position[E_AXIS], manual_feedrate[X_AXIS]/60, active_extruder);
+        plan_buffer_line(delta[X_AXIS], delta[Y_AXIS], delta[Z_AXIS], current_position[E_AXIS], manual_feedrate[X_AXIS]/60, 0);
         #else
-        plan_buffer_line(current_position[X_AXIS], current_position[Y_AXIS], current_position[Z_AXIS], current_position[E_AXIS], manual_feedrate[X_AXIS]/60, active_extruder);
+        plan_buffer_line(current_position[X_AXIS], current_position[Y_AXIS], current_position[Z_AXIS], current_position[E_AXIS], manual_feedrate[X_AXIS]/60, 0);
         #endif
         lcdDrawUpdate = 1;
     }
@@ -581,6 +581,54 @@ static void lcd_move_x()
     }
 	#endif
 }
+
+#ifdef DUAL_X_CARRIAGE
+static void lcd_move_x2()
+{
+    if (encoderPosition != 0)
+    {
+        refresh_cmd_timeout();
+        current_position[X_AXIS] += float((int)encoderPosition) * move_menu_scale;
+        if (min_software_endstops && current_position[X_AXIS] < X_MIN_POS)
+            current_position[X_AXIS] = X_MIN_POS;
+        if (max_software_endstops && current_position[X_AXIS] > X_MAX_POS)
+            current_position[X_AXIS] = X_MAX_POS;
+        encoderPosition = 0;
+        #ifdef DELTA
+        calculate_delta(current_position);
+        plan_buffer_line(delta[X_AXIS], delta[Y_AXIS], delta[Z_AXIS], current_position[E_AXIS], manual_feedrate[X_AXIS]/60, 1);
+        #else
+        plan_buffer_line(current_position[X_AXIS], current_position[Y_AXIS], current_position[Z_AXIS], current_position[E_AXIS], manual_feedrate[X_AXIS]/60,1);
+        #endif
+        lcdDrawUpdate = 1;
+    }
+    if (lcdDrawUpdate)
+    {
+        lcd_implementation_drawedit(PSTR("X2"), ftostr31(current_position[X_AXIS]));
+    }
+    if (LCD_CLICKED)
+    {
+        lcd_quick_feedback();
+        currentMenu = lcd_move_menu_axis;
+        encoderPosition = 0;
+    }
+	
+	#ifdef ECHINUS_VISION
+	if(MENU_CLICKED)
+	{
+    	lcd_return_to_status();
+        lcd_quick_feedback();
+    }
+    if(BACK_CLICKED)
+    {
+        lcd_quick_feedback();
+        currentMenu = lcd_move_menu_axis;
+        encoderPosition = 0;
+    }
+	#endif
+}
+#endif
+
 static void lcd_move_y()
 {
     if (encoderPosition != 0)
@@ -677,9 +725,9 @@ static void lcd_move_e()
         encoderPosition = 0;
         #ifdef DELTA
         calculate_delta(current_position);
-        plan_buffer_line(delta[X_AXIS], delta[Y_AXIS], delta[Z_AXIS], current_position[E_AXIS], manual_feedrate[E_AXIS]/60, active_extruder);
+        plan_buffer_line(delta[X_AXIS], delta[Y_AXIS], delta[Z_AXIS], current_position[E_AXIS], manual_feedrate[E_AXIS]/60, 0);
         #else
-        plan_buffer_line(current_position[X_AXIS], current_position[Y_AXIS], current_position[Z_AXIS], current_position[E_AXIS], manual_feedrate[E_AXIS]/60, active_extruder);
+        plan_buffer_line(current_position[X_AXIS], current_position[Y_AXIS], current_position[Z_AXIS], current_position[E_AXIS], manual_feedrate[E_AXIS]/60, 0);
         #endif
         lcdDrawUpdate = 1;
     }
@@ -708,17 +756,63 @@ static void lcd_move_e()
     }
 	#endif
 }
-
+#ifdef DUAL_X_CARRIAGE
+static void lcd_move_e2()
+{
+    if (encoderPosition != 0)
+    {
+        current_position[E_AXIS] += float((int)encoderPosition) * move_menu_scale;
+        encoderPosition = 0;
+        #ifdef DELTA
+        calculate_delta(current_position);
+        plan_buffer_line(delta[X_AXIS], delta[Y_AXIS], delta[Z_AXIS], current_position[E_AXIS], manual_feedrate[E_AXIS]/60, 1);
+        #else
+        plan_buffer_line(current_position[X_AXIS], current_position[Y_AXIS], current_position[Z_AXIS], current_position[E_AXIS], manual_feedrate[E_AXIS]/60, 1);
+        #endif
+        lcdDrawUpdate = 1;
+    }
+    if (lcdDrawUpdate)
+    {
+        lcd_implementation_drawedit(PSTR("Extruder 2"), ftostr31(current_position[E_AXIS]));
+    }
+    if (LCD_CLICKED)
+    {
+        lcd_quick_feedback();
+        currentMenu = lcd_move_menu_axis;
+        encoderPosition = 0;
+    }
+	
+	#ifdef ECHINUS_VISION
+	if(MENU_CLICKED)
+	{
+    	lcd_return_to_status();
+        lcd_quick_feedback();
+    }
+    if(BACK_CLICKED)
+    {
+        lcd_quick_feedback();
+        currentMenu = lcd_move_menu_axis;
+        encoderPosition = 0;
+    }
+	#endif
+}
+#endif
 static void lcd_move_menu_axis()
 {
     START_MENU();
     MENU_ITEM(back, MSG_MOVE_AXIS, lcd_move_menu);
     MENU_ITEM(submenu, MSG_MOVE_X, lcd_move_x);
+#ifdef DUAL_X_CARRIAGE
+    MENU_ITEM(submenu, MSG_MOVE_X2, lcd_move_x2);
+#endif
     MENU_ITEM(submenu, MSG_MOVE_Y, lcd_move_y);
     if (move_menu_scale < 10.0)
     {
         MENU_ITEM(submenu, MSG_MOVE_Z, lcd_move_z);
         MENU_ITEM(submenu, MSG_MOVE_E, lcd_move_e);
+#ifdef DUAL_X_CARRIAGE
+        MENU_ITEM(submenu, MSG_MOVE_E2, lcd_move_e2);
+#endif
     }
     END_MENU();
 	
