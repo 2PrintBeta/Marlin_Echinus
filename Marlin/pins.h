@@ -2573,7 +2573,7 @@
 #define LED2_PIN           41
 
 #define FAN_PIN            4
-#define FAN1 PIN           3
+#define FAN2_PIN           3
 
 // TODO
 #define PS_ON_PIN          -1

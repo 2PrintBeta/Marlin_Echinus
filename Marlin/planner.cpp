@@ -448,6 +448,7 @@ void check_axes_activity()
   unsigned char z_active = 0;
   unsigned char e_active = 0;
   unsigned char tail_fan_speed = fanSpeed;
+  unsigned char tail_fan2_speed = fan2Speed;
   #ifdef BARICUDA
   unsigned char tail_valve_pressure = ValvePressure;
   unsigned char tail_e_to_p_pressure = EtoPPressure;
@@ -458,6 +459,7 @@ void check_axes_activity()
   {
     uint8_t block_index = block_buffer_tail;
     tail_fan_speed = block_buffer[block_index].fan_speed;
+    tail_fan2_speed = block_buffer[block_index].fan2_speed;
     #ifdef BARICUDA
     tail_valve_pressure = block_buffer[block_index].valve_pressure;
     tail_e_to_p_pressure = block_buffer[block_index].e_to_p_pressure;
@@ -495,11 +497,25 @@ void check_axes_activity()
     } else {
       fan_kick_end = 0;
     }
+    static unsigned long fan2_kick_end;
+    if (tail_fan2_speed) {
+      if (fan2_kick_end == 0) {
+        // Just starting up fan - run at full power.
+        fan2_kick_end = millis() + FAN_KICKSTART_TIME;
+        tail_fan2_speed = 255;
+      } else if (fan2_kick_end > millis())
+        // Fan still spinning up.
+        tail_fan2_speed = 255;
+    } else {
+      fan2_kick_end = 0;
+    }
   #endif//FAN_KICKSTART_TIME
   #ifdef FAN_SOFT_PWM
   fanSpeedSoftPwm = tail_fan_speed;
+  fan2SpeedSoftPwm = tail_fan2_speed;  
   #else
   analogWrite(FAN_PIN,tail_fan_speed);
+  analogWrite(FAN2_PIN,tail_fan2_speed);
   #endif//!FAN_SOFT_PWM
 #endif//FAN_PIN > -1
 #ifdef AUTOTEMP
@@ -605,6 +621,7 @@ block->steps_y = labs((target[X_AXIS]-position[X_AXIS]) - (target[Y_AXIS]-positi
   }
 
   block->fan_speed = fanSpeed;
+  block->fan2_speed = fan2Speed;
   #ifdef BARICUDA
   block->valve_pressure = ValvePressure;
   block->e_to_p_pressure = EtoPPressure;

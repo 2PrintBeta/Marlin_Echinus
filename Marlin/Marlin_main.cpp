@@ -229,6 +229,7 @@ float extruder_offset[NUM_EXTRUDER_OFFSETS][EXTRUDERS] = {
 #endif
 uint8_t active_extruder = 0;
 int fanSpeed=0;
+int fan2Speed=0;
 #ifdef SERVO_ENDSTOPS
   int servo_endstops[] = SERVO_ENDSTOPS;
   int servo_endstop_angles[] = SERVO_ENDSTOP_ANGLES;
@@ -1804,6 +1805,10 @@ void process_commands()
         if (pin_number == FAN_PIN)
           fanSpeed = pin_status;
       #endif
+      #if defined(FAN2_PIN) && FAN2_PIN > -1
+        if (pin_number == FAN2_PIN)
+          fan2Speed = pin_status;
+      #endif
         if (pin_number > -1)
         {
           pinMode(pin_number, OUTPUT);
@@ -2020,15 +2025,43 @@ void process_commands()
 
     #if defined(FAN_PIN) && FAN_PIN > -1
       case 106: //M106 Fan On
+        #if defined(FAN2_PIN) && FAN2_PIN > -1   
+        codenum =0; 
+        if(code_seen('P')) codenum = code_value();
+
+        if (code_seen('S')){
+            if(codenum == 0)
+               fanSpeed=constrain(code_value(),0,255);
+            else
+                fan2Speed=constrain(code_value(),0,255);
+        }
+        else {
+          if(codenum == 0)
+            fanSpeed=255;
+          else
+            fan2Speed=255;
+        }
+        #else
         if (code_seen('S')){
            fanSpeed=constrain(code_value(),0,255);
         }
         else {
           fanSpeed=255;
         }
+        #endif
         break;
       case 107: //M107 Fan Off
-        fanSpeed = 0;
+        #if defined(FAN2_PIN) && FAN2_PIN > -1 
+            codenum =0;  
+            if(code_seen('P')) codenum = code_value();
+
+            if(codenum ==0)
+                fanSpeed = 0;
+            else
+               fan2Speed =0;
+        #else
+            fanSpeed = 0;
+        #endif
         break;
     #endif //FAN_PIN
     #ifdef BARICUDA
@@ -2092,6 +2125,7 @@ void process_commands()
         disable_e2();
         finishAndDisableSteppers();
         fanSpeed = 0;
+        fan2Speed =0;
         delay(1000); // Wait a little before to switch off
       #if defined(SUICIDE_PIN) && SUICIDE_PIN > -1
         st_synchronize();
