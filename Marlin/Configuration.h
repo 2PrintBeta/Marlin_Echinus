@@ -452,7 +452,7 @@ const bool Z_MAX_ENDSTOP_INVERTING = true; // set to true to invert the logic of
 #define EXTRUDER_OFFSET_X0 0.0 // (in mm) for extruder 0, offset of the hotend on the X axis
 #define EXTRUDER_OFFSET_Y0 0.0  // (in mm) for extruder 0, offset of the hotend on the Y axis
 #define EXTRUDER_OFFSET_Z0 0.0  // (in mm) for extruder 0, offset of the hotend on the Z axis
-#define EXTRUDER_OFFSET_X1 0.0 // (in mm) for extruder 1, offset of the hotend on the X axis
+#define EXTRUDER_OFFSET_X1 220.0 // (in mm) for extruder 1, offset of the hotend on the X axis
 #define EXTRUDER_OFFSET_Y1 0.0  // (in mm) for extruder 1, offset of the hotend on the Y axis
 #define EXTRUDER_OFFSET_Z1 0.0  // (in mm) for extruder 1, offset of the hotend on the Z axis
 

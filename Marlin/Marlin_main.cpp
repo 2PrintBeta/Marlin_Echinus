@@ -1419,6 +1419,11 @@ void process_commands()
         enable_endstops(false);
       #endif
 
+#ifdef DUAL_X_CARRIAGE
+       //reset old remembered parked postion
+       memcpy(raised_parked_position, current_position, sizeof(raised_parked_position));
+#endif
+
       feedrate = saved_feedrate;
       feedmultiply = saved_feedmultiply;
       previous_millis_cmd = millis();
@@ -3211,6 +3216,7 @@ void calculate_delta(float cartesian[3])
 
 void prepare_move()
 {
+    SERIAL_ECHOLNPGM("prepare_move");
   clamp_to_software_endstops(destination);
 
   previous_millis_cmd = millis();
@@ -3272,6 +3278,7 @@ void prepare_move()
       }
       delayed_move_time = 0;
       // unpark extruder: 1) raise, 2) move into starting XY position, 3) lower
+    SERIAL_ECHOLNPGM("unparking moves");
       plan_buffer_line(raised_parked_position[X_AXIS], raised_parked_position[Y_AXIS], raised_parked_position[Z_AXIS],    current_position[E_AXIS], max_feedrate[Z_AXIS], active_extruder);
       plan_buffer_line(current_position[X_AXIS], current_position[Y_AXIS], raised_parked_position[Z_AXIS],
           current_position[E_AXIS], min(max_feedrate[X_AXIS],max_feedrate[Y_AXIS]), active_extruder);

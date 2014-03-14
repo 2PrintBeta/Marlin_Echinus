@@ -477,11 +477,6 @@ static void lcd_tune_menu()
 #ifdef FILAMENTCHANGEENABLE
      MENU_ITEM(gcode, MSG_FILAMENTCHANGE, PSTR("M600"));
 #endif
-#ifdef DUAL_X_CARRIAGE
-    MENU_ITEM_EDIT(float52, MSG_EXTRUDER_OFFSET_X, &extruder_offset[X_AXIS][1], -990, 990);
-    MENU_ITEM_EDIT(float52, MSG_EXTRUDER_OFFSET_Y, &extruder_offset[Y_AXIS][1], -990, 990);
-    MENU_ITEM_EDIT(float52, MSG_EXTRUDER_OFFSET_Z, &extruder_offset[Z_AXIS][1], -990, 990);
-#endif
     END_MENU();
 	
 	#ifdef ECHINUS_VISION
