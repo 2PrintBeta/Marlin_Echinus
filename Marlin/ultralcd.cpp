@@ -464,6 +464,7 @@ static void lcd_tune_menu()
     MENU_ITEM_EDIT(int3, MSG_BED, &target_temperature_bed, 0, BED_MAXTEMP - 15);
 #endif
     MENU_ITEM_EDIT(int3, MSG_FAN_SPEED, &fanSpeed, 0, 255);
+    MENU_ITEM_EDIT(int3, MSG_FAN2_SPEED, &fan2Speed, 0, 255);
     MENU_ITEM_EDIT(int3, MSG_FLOW, &extrudemultiply, 10, 999);
 
 #ifdef BABYSTEPPING
@@ -475,6 +476,11 @@ static void lcd_tune_menu()
 #endif
 #ifdef FILAMENTCHANGEENABLE
      MENU_ITEM(gcode, MSG_FILAMENTCHANGE, PSTR("M600"));
+#endif
+#ifdef DUAL_X_CARRIAGE
+    MENU_ITEM_EDIT(float52, MSG_EXTRUDER_OFFSET_X, &extruder_offset[X_AXIS][1], -990, 990);
+    MENU_ITEM_EDIT(float52, MSG_EXTRUDER_OFFSET_Y, &extruder_offset[Y_AXIS][1], -990, 990);
+    MENU_ITEM_EDIT(float52, MSG_EXTRUDER_OFFSET_Z, &extruder_offset[Z_AXIS][1], -990, 990);
 #endif
     END_MENU();
 	
@@ -1090,9 +1096,9 @@ static void lcd_control_motion_menu()
     MENU_ITEM_EDIT(float51, MSG_ZSTEPS, &axis_steps_per_unit[Z_AXIS], 5, 9999);
     MENU_ITEM_EDIT(float51, MSG_ESTEPS, &axis_steps_per_unit[E_AXIS], 5, 9999);
 #ifdef DUAL_X_CARRIAGE
-    MENU_ITEM_EDIT(float52, MSG_EXTRUDER_OFFSET_X, &extruder_offset[X_AXIS][1], 0, 990);
-    MENU_ITEM_EDIT(float52, MSG_EXTRUDER_OFFSET_Y, &extruder_offset[Y_AXIS][1], 0, 990);
-    MENU_ITEM_EDIT(float52, MSG_EXTRUDER_OFFSET_Z, &extruder_offset[Z_AXIS][1], 0, 990);
+    MENU_ITEM_EDIT(float52, MSG_EXTRUDER_OFFSET_X, &extruder_offset[X_AXIS][1], -990, 990);
+    MENU_ITEM_EDIT(float52, MSG_EXTRUDER_OFFSET_Y, &extruder_offset[Y_AXIS][1], -990, 990);
+    MENU_ITEM_EDIT(float52, MSG_EXTRUDER_OFFSET_Z, &extruder_offset[Z_AXIS][1], -990, 990);
 #endif
 #ifdef ABORT_ON_ENDSTOP_HIT_FEATURE_ENABLED
     MENU_ITEM_EDIT(bool, MSG_ENDSTOP_ABORT, &abort_on_endstop_hit);
@@ -1242,10 +1248,10 @@ void lcd_sdcard_menu()
         if ((int32_t)encoderPosition > maxEditValue) \
             encoderPosition = maxEditValue; \
         if (lcdDrawUpdate) \
-            lcd_implementation_drawedit(editLabel, _strFunc(((_type)encoderPosition) / scale)); \
+            lcd_implementation_drawedit(editLabel, _strFunc(((_type)(int32_t)encoderPosition) / scale)); \
         if (LCD_CLICKED) \
         { \
-            *((_type*)editValue) = ((_type)encoderPosition) / scale; \
+            *((_type*)editValue) = ((_type)(int32_t)encoderPosition) / scale; \
             lcd_quick_feedback(); \
             currentMenu = prevMenu; \
             encoderPosition = prevEncoderPosition; \
@@ -1259,10 +1265,10 @@ void lcd_sdcard_menu()
         if ((int32_t)encoderPosition > maxEditValue) \
             encoderPosition = maxEditValue; \
         if (lcdDrawUpdate) \
-            lcd_implementation_drawedit(editLabel, _strFunc(((_type)encoderPosition) / scale)); \
+            lcd_implementation_drawedit(editLabel, _strFunc(((_type)(int32_t)encoderPosition) / scale)); \
         if (LCD_CLICKED) \
         { \
-            *((_type*)editValue) = ((_type)encoderPosition) / scale; \
+            *((_type*)editValue) = ((_type)(int32_t)encoderPosition) / scale; \
             lcd_quick_feedback(); \
             currentMenu = prevMenu; \
             encoderPosition = prevEncoderPosition; \
