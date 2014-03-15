@@ -1225,6 +1225,14 @@ void process_commands()
       feedmultiply = 100;
       previous_millis_cmd = millis();
 
+      home_all_axis = !((code_seen(axis_codes[X_AXIS])) || (code_seen(axis_codes[Y_AXIS])) || (code_seen(axis_codes[Z_AXIS])));
+
+	  //set current position to 0 for all axes which are homed.
+	  if((home_all_axis) || (code_seen(axis_codes[X_AXIS]))) current_position[X_AXIS] =0;
+	  if((home_all_axis) || (code_seen(axis_codes[Y_AXIS]))) current_position[Y_AXIS] =0;
+	  if((home_all_axis) || (code_seen(axis_codes[Z_AXIS]))) current_position[Z_AXIS] =0;
+	  plan_set_position(current_position[X_AXIS], current_position[Y_AXIS], current_position[Z_AXIS], current_position[E_AXIS]);
+	  
       enable_endstops(true);
 
       for(int8_t i=0; i < NUM_AXIS; i++) {
@@ -1264,8 +1272,7 @@ void process_commands()
 
 #else // NOT DELTA
 
-      home_all_axis = !((code_seen(axis_codes[X_AXIS])) || (code_seen(axis_codes[Y_AXIS])) || (code_seen(axis_codes[Z_AXIS])));
-
+    
       #if Z_HOME_DIR > 0                      // If homing away from BED do Z first
       if((home_all_axis) || (code_seen(axis_codes[Z_AXIS]))) {
         HOMEAXIS(Z);
@@ -1418,11 +1425,6 @@ void process_commands()
       #ifdef ENDSTOPS_ONLY_FOR_HOMING
         enable_endstops(false);
       #endif
-
-#ifdef DUAL_X_CARRIAGE
-       //reset old remembered parked postion
-       memcpy(raised_parked_position, current_position, sizeof(raised_parked_position));
-#endif
 
       feedrate = saved_feedrate;
       feedmultiply = saved_feedmultiply;
@@ -3216,7 +3218,6 @@ void calculate_delta(float cartesian[3])
 
 void prepare_move()
 {
-    SERIAL_ECHOLNPGM("prepare_move");
   clamp_to_software_endstops(destination);
 
   previous_millis_cmd = millis();
@@ -3278,7 +3279,6 @@ void prepare_move()
       }
       delayed_move_time = 0;
       // unpark extruder: 1) raise, 2) move into starting XY position, 3) lower
-    SERIAL_ECHOLNPGM("unparking moves");
       plan_buffer_line(raised_parked_position[X_AXIS], raised_parked_position[Y_AXIS], raised_parked_position[Z_AXIS],    current_position[E_AXIS], max_feedrate[Z_AXIS], active_extruder);
       plan_buffer_line(current_position[X_AXIS], current_position[Y_AXIS], raised_parked_position[Z_AXIS],
           current_position[E_AXIS], min(max_feedrate[X_AXIS],max_feedrate[Y_AXIS]), active_extruder);
