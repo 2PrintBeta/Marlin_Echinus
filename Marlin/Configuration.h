@@ -131,7 +131,11 @@
 // 110 is Pt100 with 1k pullup (non standard)
 
 #define TEMP_SENSOR_0 55
+#if EXTRUDERS > 1 
 #define TEMP_SENSOR_1 55
+#else
+#define TEMP_SENSOR_1 0
+#endif
 #define TEMP_SENSOR_2 0
 #define TEMP_SENSOR_BED 55
 
