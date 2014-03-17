@@ -1318,6 +1318,7 @@ void process_commands()
       if((home_all_axis) || (code_seen(axis_codes[X_AXIS])))
       {
       #ifdef DUAL_X_CARRIAGE
+        active_extruder =0;
         int tmp_extruder = active_extruder;
         extruder_duplication_enabled = false;
         active_extruder = !active_extruder;

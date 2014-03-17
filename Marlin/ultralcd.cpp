@@ -971,7 +971,9 @@ static void lcd_control_temperature_menu()
     MENU_ITEM_EDIT(int3, MSG_BED, &target_temperature_bed, 0, BED_MAXTEMP - 15);
 #endif
     MENU_ITEM_EDIT(int3, MSG_FAN_SPEED, &fanSpeed, 0, 255);
+#if EXTRUDER > 1
     MENU_ITEM_EDIT(int3, MSG_FAN2_SPEED, &fan2Speed, 0, 255);
+#endif
 #ifdef AUTOTEMP
     MENU_ITEM_EDIT(bool, MSG_AUTOTEMP, &autotemp_enabled);
     MENU_ITEM_EDIT(float3, MSG_MIN, &autotemp_min, 0, HEATER_0_MAXTEMP - 15);
