@@ -1212,7 +1212,8 @@ void lcd_sdcard_menu()
             #endif
             if (card.filenameIsDir)
             {
-                MENU_ITEM(sddirectory, MSG_CARD_MENU, card.filename, card.longFilename);
+              // SUBDIRs currently disabled because of memory problems
+              //  MENU_ITEM(sddirectory, MSG_CARD_MENU, card.filename, card.longFilename);
             }else{
                 MENU_ITEM(sdfile, MSG_CARD_MENU, card.filename, card.longFilename);
             }
