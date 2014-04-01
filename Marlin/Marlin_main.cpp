@@ -1975,6 +1975,7 @@ void process_commands()
             #endif
             codenum = millis();
           }
+		  previous_millis_cmd = millis();   //update cmd time, so steppers are not shut off
           manage_heater();
           manage_inactivity();
           lcd_update();
@@ -2022,6 +2023,7 @@ void process_commands()
             SERIAL_PROTOCOLLN("");
             codenum = millis();
           }
+		  previous_millis_cmd = millis();   //update cmd time, so steppers are not shut off
           manage_heater();
           manage_inactivity();
           lcd_update();
