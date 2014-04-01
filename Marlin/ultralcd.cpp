@@ -323,6 +323,9 @@ void lcd_preheat_pla()
     setTargetHotend2(plaPreheatHotendTemp);
     setTargetBed(plaPreheatHPBTemp);
     fanSpeed = plaPreheatFanSpeed;
+#ifdef DUAL_X_CARRIAGE	
+    fan2Speed = plaPreheatFanSpeed;
+#endif
     lcd_return_to_status();
     setWatch(); // heater sanity check timer
 }
@@ -334,6 +337,9 @@ void lcd_preheat_abs()
     setTargetHotend2(absPreheatHotendTemp);
     setTargetBed(absPreheatHPBTemp);
     fanSpeed = absPreheatFanSpeed;
+#ifdef DUAL_X_CARRIAGE	
+    fan2Speed = absPreheatFanSpeed;
+#endif	
     lcd_return_to_status();
     setWatch(); // heater sanity check timer
 }
@@ -971,7 +977,7 @@ static void lcd_control_temperature_menu()
     MENU_ITEM_EDIT(int3, MSG_BED, &target_temperature_bed, 0, BED_MAXTEMP - 15);
 #endif
     MENU_ITEM_EDIT(int3, MSG_FAN_SPEED, &fanSpeed, 0, 255);
-#if EXTRUDER > 1
+#if EXTRUDERS > 1
     MENU_ITEM_EDIT(int3, MSG_FAN2_SPEED, &fan2Speed, 0, 255);
 #endif
 #ifdef AUTOTEMP
