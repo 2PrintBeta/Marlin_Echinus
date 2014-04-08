@@ -175,6 +175,11 @@
     #define MSG_EXTRUDER_OFFSET_X "Offset X"
     #define MSG_EXTRUDER_OFFSET_Y "Offset Y"
     #define MSG_EXTRUDER_OFFSET_Z "Offset Z"
+    #define MSG_INVERT_X "Invert X dir"
+    #define MSG_INVERT_X2 "Invert X2 dir"
+    #define MSG_INVERT_Y "Invert Y dir"
+    #define MSG_INVERT_Z "Invert Z dir"
+    #define MSG_INVERT_E "Invert E dir"
 
 // Serial Console Messages
 

@@ -357,51 +357,51 @@ ISR(TIMER1_COMPA_vect)
     if((out_bits & (1<<X_AXIS))!=0){
       #ifdef DUAL_X_CARRIAGE
         if (extruder_duplication_enabled){
-          WRITE(X_DIR_PIN, INVERT_X_DIR);
-          WRITE(X2_DIR_PIN, INVERT_X2_DIR);
+          WRITE(X_DIR_PIN, invert_x_dir);
+          WRITE(X2_DIR_PIN, invert_x2_dir);
         }
         else{
           if (current_block->active_extruder != 0)
-            WRITE(X2_DIR_PIN, INVERT_X2_DIR);
+            WRITE(X2_DIR_PIN, invert_x2_dir);
           else
-            WRITE(X_DIR_PIN, INVERT_X_DIR);
+            WRITE(X_DIR_PIN, invert_x_dir);
         }
       #else
-        WRITE(X_DIR_PIN, INVERT_X_DIR);
+        WRITE(X_DIR_PIN, invert_x_dir);
       #endif        
       count_direction[X_AXIS]=-1;
     }
     else{
       #ifdef DUAL_X_CARRIAGE
         if (extruder_duplication_enabled){
-          WRITE(X_DIR_PIN, !INVERT_X_DIR);
-          WRITE(X2_DIR_PIN, !INVERT_X2_DIR);
+          WRITE(X_DIR_PIN, !invert_x_dir);
+          WRITE(X2_DIR_PIN, !invert_x2_dir);
         }
         else{
           if (current_block->active_extruder != 0)
-            WRITE(X2_DIR_PIN, !INVERT_X2_DIR);
+            WRITE(X2_DIR_PIN, !invert_x2_dir);
           else
-            WRITE(X_DIR_PIN, !INVERT_X_DIR);
+            WRITE(X_DIR_PIN, !invert_x_dir);
         }
       #else
-        WRITE(X_DIR_PIN, !INVERT_X_DIR);
+        WRITE(X_DIR_PIN, !invert_x_dir);
       #endif        
       count_direction[X_AXIS]=1;
     }
     if((out_bits & (1<<Y_AXIS))!=0){
-      WRITE(Y_DIR_PIN, INVERT_Y_DIR);
+      WRITE(Y_DIR_PIN, invert_y_dir);
 	  
 	  #ifdef Y_DUAL_STEPPER_DRIVERS
-	    WRITE(Y2_DIR_PIN, !(INVERT_Y_DIR == INVERT_Y2_VS_Y_DIR));
+	    WRITE(Y2_DIR_PIN, !(invert_y_dir == INVERT_Y2_VS_Y_DIR));
 	  #endif
 	  
       count_direction[Y_AXIS]=-1;
     }
     else{
-      WRITE(Y_DIR_PIN, !INVERT_Y_DIR);
+      WRITE(Y_DIR_PIN, !invert_y_dir);
 	  
 	  #ifdef Y_DUAL_STEPPER_DRIVERS
-	    WRITE(Y2_DIR_PIN, (INVERT_Y_DIR == INVERT_Y2_VS_Y_DIR));
+	    WRITE(Y2_DIR_PIN, (invert_y_dir == INVERT_Y2_VS_Y_DIR));
 	  #endif
 	  
       count_direction[Y_AXIS]=1;
@@ -489,10 +489,10 @@ ISR(TIMER1_COMPA_vect)
     }
 
     if ((out_bits & (1<<Z_AXIS)) != 0) {   // -direction
-      WRITE(Z_DIR_PIN,INVERT_Z_DIR);
+      WRITE(Z_DIR_PIN,invert_z_dir);
       
       #ifdef Z_DUAL_STEPPER_DRIVERS
-        WRITE(Z2_DIR_PIN,INVERT_Z_DIR);
+        WRITE(Z2_DIR_PIN,invert_z_dir);
       #endif
 
       count_direction[Z_AXIS]=-1;
@@ -510,10 +510,10 @@ ISR(TIMER1_COMPA_vect)
       }
     }
     else { // +direction
-      WRITE(Z_DIR_PIN,!INVERT_Z_DIR);
+      WRITE(Z_DIR_PIN,!invert_z_dir);
 
       #ifdef Z_DUAL_STEPPER_DRIVERS
-        WRITE(Z2_DIR_PIN,!INVERT_Z_DIR);
+        WRITE(Z2_DIR_PIN,!invert_z_dir);
       #endif
 
       count_direction[Z_AXIS]=1;
@@ -1051,9 +1051,9 @@ void babystep(const uint8_t axis,const bool direction)
     uint8_t old_x_dir_pin= READ(X_DIR_PIN);  //if dualzstepper, both point to same direction.
    
     //setup new step
-    WRITE(X_DIR_PIN,(INVERT_X_DIR)^direction);
+    WRITE(X_DIR_PIN,(invert_x_dir)^direction);
     #ifdef DUAL_X_CARRIAGE
-      WRITE(X2_DIR_PIN,(INVERT_X2_DIR)^direction);
+      WRITE(X2_DIR_PIN,(invert_x2_dir)^direction);
     #endif
     
     //perform step 
@@ -1083,9 +1083,9 @@ void babystep(const uint8_t axis,const bool direction)
     uint8_t old_y_dir_pin= READ(Y_DIR_PIN);  //if dualzstepper, both point to same direction.
    
     //setup new step
-    WRITE(Y_DIR_PIN,(INVERT_Y_DIR)^direction);
+    WRITE(Y_DIR_PIN,(invert_y_dir)^direction);
     #ifdef DUAL_Y_CARRIAGE
-      WRITE(Y2_DIR_PIN,(INVERT_Y_DIR)^direction);
+      WRITE(Y2_DIR_PIN,(invert_y_dir)^direction);
     #endif
     
     //perform step 
@@ -1116,9 +1116,9 @@ void babystep(const uint8_t axis,const bool direction)
     enable_z();
     uint8_t old_z_dir_pin= READ(Z_DIR_PIN);  //if dualzstepper, both point to same direction.
     //setup new step
-    WRITE(Z_DIR_PIN,(INVERT_Z_DIR)^direction^BABYSTEP_INVERT_Z);
+    WRITE(Z_DIR_PIN,(invert_z_dir)^direction^BABYSTEP_INVERT_Z);
     #ifdef Z_DUAL_STEPPER_DRIVERS
-      WRITE(Z2_DIR_PIN,(INVERT_Z_DIR)^direction^BABYSTEP_INVERT_Z);
+      WRITE(Z2_DIR_PIN,(invert_z_dir)^direction^BABYSTEP_INVERT_Z);
     #endif
     //perform step 
     WRITE(Z_STEP_PIN, !INVERT_Z_STEP_PIN); 
@@ -1152,9 +1152,9 @@ void babystep(const uint8_t axis,const bool direction)
     uint8_t old_y_dir_pin= READ(Y_DIR_PIN);  
     uint8_t old_z_dir_pin= READ(Z_DIR_PIN);  
     //setup new step
-    WRITE(X_DIR_PIN,(INVERT_X_DIR)^direction^BABYSTEP_INVERT_Z);
-    WRITE(Y_DIR_PIN,(INVERT_Y_DIR)^direction^BABYSTEP_INVERT_Z);
-    WRITE(Z_DIR_PIN,(INVERT_Z_DIR)^direction^BABYSTEP_INVERT_Z);
+    WRITE(X_DIR_PIN,(invert_x_dir)^direction^BABYSTEP_INVERT_Z);
+    WRITE(Y_DIR_PIN,(invert_y_dir)^direction^BABYSTEP_INVERT_Z);
+    WRITE(Z_DIR_PIN,(invert_z_dir)^direction^BABYSTEP_INVERT_Z);
     
     //perform step 
     WRITE(X_STEP_PIN, !INVERT_X_STEP_PIN); 

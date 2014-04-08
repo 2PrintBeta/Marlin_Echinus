@@ -1103,6 +1103,14 @@ static void lcd_control_motion_menu()
     MENU_ITEM_EDIT(float52, MSG_EXTRUDER_OFFSET_Y, &extruder_offset[Y_AXIS][1], -990, 990);
     MENU_ITEM_EDIT(float52, MSG_EXTRUDER_OFFSET_Z, &extruder_offset[Z_AXIS][1], -990, 990);
 #endif
+    MENU_ITEM_EDIT(bool, MSG_INVERT_X, &invert_x_dir);
+#ifdef DUAL_X_CARRIAGE
+    MENU_ITEM_EDIT(bool, MSG_INVERT_X2, &invert_x2_dir);
+#endif
+    MENU_ITEM_EDIT(bool, MSG_INVERT_Y, &invert_y_dir);
+    MENU_ITEM_EDIT(bool, MSG_INVERT_Z, &invert_z_dir);
+    MENU_ITEM_EDIT(bool, MSG_INVERT_E, &invert_e0_dir);
+
 #ifdef ABORT_ON_ENDSTOP_HIT_FEATURE_ENABLED
     MENU_ITEM_EDIT(bool, MSG_ENDSTOP_ABORT, &abort_on_endstop_hit);
 #endif

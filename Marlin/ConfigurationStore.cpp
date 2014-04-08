@@ -38,9 +38,9 @@ void _EEPROM_readData(int &pos, uint8_t* value, uint8_t size)
 // wrong data being written to the variables.
 // ALSO:  always make sure the variables in the Store and retrieve sections are in the same order.
 #ifdef DELTA
-#define EEPROM_VERSION "V11"
+#define EEPROM_VERSION "V12"
 #else
-#define EEPROM_VERSION "V11"
+#define EEPROM_VERSION "V12"
 #endif
 
 #ifdef EEPROM_SETTINGS
@@ -98,6 +98,14 @@ void Config_StoreSettings()
   EEPROM_WRITE_VAR(i,extruder_offset[Y_AXIS][1]);
   EEPROM_WRITE_VAR(i,extruder_offset[Z_AXIS][1]);  
   #endif
+  EEPROM_WRITE_VAR(i,invert_x_dir);
+  EEPROM_WRITE_VAR(i,invert_x2_dir);
+  EEPROM_WRITE_VAR(i,invert_y_dir);  
+  EEPROM_WRITE_VAR(i,invert_z_dir); 
+  EEPROM_WRITE_VAR(i,invert_e0_dir); 
+  EEPROM_WRITE_VAR(i,invert_e1_dir); 
+  EEPROM_WRITE_VAR(i,invert_e2_dir); 
+
   char ver2[4]=EEPROM_VERSION;
   i=EEPROM_OFFSET;
   EEPROM_WRITE_VAR(i,ver2); // validate data
@@ -195,6 +203,17 @@ void Config_PrintSettings()
     SERIAL_ECHOPAIR(" Z" ,extruder_offset[Z_AXIS][1]);
     SERIAL_ECHOLN(""); 
 #endif
+    SERIAL_ECHO_START;
+    SERIAL_ECHOLNPGM("Axis inversion settings:");
+    SERIAL_ECHO_START;
+    SERIAL_ECHOPAIR("   M215 X",(unsigned long)invert_x_dir);
+    SERIAL_ECHOPAIR(" B",(unsigned long)invert_x2_dir);
+    SERIAL_ECHOPAIR(" Y",(unsigned long)invert_y_dir);
+    SERIAL_ECHOPAIR(" Z",(unsigned long)invert_z_dir);
+    SERIAL_ECHOPAIR(" U",(unsigned long)invert_e0_dir);
+    SERIAL_ECHOPAIR(" V",(unsigned long)invert_e1_dir);
+    SERIAL_ECHOPAIR(" W",(unsigned long)invert_e2_dir);
+
 } 
 #endif
 
@@ -259,6 +278,14 @@ void Config_RetrieveSettings()
         EEPROM_READ_VAR(i,extruder_offset[Y_AXIS][1]);    
         EEPROM_READ_VAR(i,extruder_offset[Z_AXIS][1]);
         #endif
+        EEPROM_READ_VAR(i,invert_x_dir);
+        EEPROM_READ_VAR(i,invert_x2_dir);
+        EEPROM_READ_VAR(i,invert_y_dir);
+        EEPROM_READ_VAR(i,invert_z_dir);
+        EEPROM_READ_VAR(i,invert_e0_dir);
+        EEPROM_READ_VAR(i,invert_e1_dir);
+        EEPROM_READ_VAR(i,invert_e2_dir);
+
 		// Call updatePID (similar to when we have processed M301)
 		updatePID();
         SERIAL_ECHO_START;
@@ -324,6 +351,13 @@ void Config_ResetDefault()
     extruder_offset[Y_AXIS][1] = EXTRUDER_OFFSET_Y1;
     extruder_offset[Z_AXIS][1] = EXTRUDER_OFFSET_Z1;
 #endif
+    invert_x_dir = INVERT_X_DIR_DEFAULT;
+    invert_x2_dir = INVERT_X2_DIR_DEFAULT;
+    invert_y_dir = INVERT_Y_DIR_DEFAULT;
+    invert_z_dir = INVERT_Z_DIR_DEFAULT;
+    invert_e0_dir = INVERT_E0_DIR_DEFAULT;
+    invert_e1_dir = INVERT_E1_DIR_DEFAULT;
+    invert_e2_dir = INVERT_E2_DIR_DEFAULT;
 #ifdef PIDTEMP
     Kp = DEFAULT_Kp;
     Ki = scalePID_i(DEFAULT_Ki);

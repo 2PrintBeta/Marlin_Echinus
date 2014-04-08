@@ -145,6 +145,7 @@
 // M208 - set recover=unretract length S[positive mm surplus to the M207 S*] F[feedrate mm/sec]
 // M209 - S<1=true/0=false> enable automatic retract detect if the slicer did not support G10/11: every normal extrude-only move will be classified as retract depending on the direction.
 // M214 - Change extruder without park / unpark moves and changing offsets
+// M215 - Change axis inversion.
 // M218 - set hotend offset (in mm): T<extruder_number> X<offset_on_X> Y<offset_on_Y>
 // M220 S<factor in percent>- set speed factor override percentage
 // M221 S<factor in percent>- set extrude factor override percentage
@@ -273,6 +274,14 @@ int EtoPPressure=0;
   float delta_diagonal_rod_2= sq(delta_diagonal_rod);
   float delta_segments_per_second= DELTA_SEGMENTS_PER_SECOND;
 #endif					
+// changeable axis directions
+bool invert_x_dir = INVERT_X_DIR_DEFAULT;
+bool invert_x2_dir = INVERT_X2_DIR_DEFAULT;
+bool invert_y_dir = INVERT_Y_DIR_DEFAULT;
+bool invert_z_dir = INVERT_Z_DIR_DEFAULT;
+bool invert_e0_dir = INVERT_E0_DIR_DEFAULT;
+bool invert_e1_dir = INVERT_E1_DIR_DEFAULT;
+bool invert_e2_dir = INVERT_E2_DIR_DEFAULT;
 
 //===========================================================================
 //=============================Private Variables=============================
@@ -2440,6 +2449,41 @@ void process_commands()
         }
         break;
     }
+    #endif
+    case 215:  //M215 Change axis inversion settings. X=X, X2=B,Y=Y,Z=Z, E0=U, E1=V,E2=W
+    {
+        if(code_seen('X'))
+        {
+            invert_x_dir = code_value();
+        }
+        if(code_seen('B'))
+        {
+            invert_x2_dir = code_value();
+        }
+        if(code_seen('Y'))
+        {
+            invert_y_dir = code_value();
+        }
+        if(code_seen('Z'))
+        {
+            invert_z_dir = code_value();
+        }
+        if(code_seen('U'))
+        {
+            invert_e0_dir = code_value();
+        }
+        if(code_seen('V'))
+        {
+            invert_e1_dir = code_value();
+        }
+        if(code_seen('W'))
+        {
+            invert_e2_dir = code_value();
+        }
+        break;
+    }
+
+    #if EXTRUDERS > 1
     case 218: // M218 - set hotend offset (in mm), T<extruder_number> X<offset_on_X> Y<offset_on_Y>
     {
       if(setTargetedHotend(218)){

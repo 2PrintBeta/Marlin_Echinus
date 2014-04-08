@@ -248,6 +248,13 @@ extern float extruder_offset[][EXTRUDERS];
 extern void digipot_i2c_set_current( int channel, float current );
 extern void digipot_i2c_init();
 #endif
-
+//configurable axis directions
+extern bool invert_x_dir;
+extern bool invert_x2_dir;
+extern bool invert_y_dir;
+extern bool invert_z_dir;
+extern bool invert_e0_dir;
+extern bool invert_e1_dir;
+extern bool invert_e2_dir;
 #endif
 
