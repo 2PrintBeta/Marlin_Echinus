@@ -146,6 +146,8 @@
 // M209 - S<1=true/0=false> enable automatic retract detect if the slicer did not support G10/11: every normal extrude-only move will be classified as retract depending on the direction.
 // M214 - Change extruder without park / unpark moves and changing offsets
 // M215 - Change axis inversion.
+// M216 - Preheat PLA Settings
+// M217 - Preheat ABS Settings
 // M218 - set hotend offset (in mm): T<extruder_number> X<offset_on_X> Y<offset_on_Y>
 // M220 S<factor in percent>- set speed factor override percentage
 // M221 S<factor in percent>- set extrude factor override percentage
@@ -2482,7 +2484,38 @@ void process_commands()
         }
         break;
     }
-
+    case 216:  //M216 Change Preheat PLA settings. H=Nozzle, B= bed, F= fan
+    {
+        if(code_seen('H'))
+        {
+            plaPreheatHotendTemp = code_value();
+        }
+        if(code_seen('B'))
+        {
+            plaPreheatHPBTemp = code_value();
+        }
+        if(code_seen('F'))
+        {
+            plaPreheatFanSpeed = code_value();
+        }
+        break;
+    }
+    case 217://M216 Change Preheat PLA settings. H=Nozzle, B= bed, F= fan
+    {
+        if(code_seen('H'))
+        {
+            absPreheatHotendTemp = code_value();
+        }
+        if(code_seen('B'))
+        {
+            absPreheatHPBTemp = code_value();
+        }
+        if(code_seen('F'))
+        {
+            absPreheatFanSpeed = code_value();
+        }
+        break;
+    }
     #if EXTRUDERS > 1
     case 218: // M218 - set hotend offset (in mm), T<extruder_number> X<offset_on_X> Y<offset_on_Y>
     {

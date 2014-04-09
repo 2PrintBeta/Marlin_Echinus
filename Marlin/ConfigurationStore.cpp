@@ -38,9 +38,9 @@ void _EEPROM_readData(int &pos, uint8_t* value, uint8_t size)
 // wrong data being written to the variables.
 // ALSO:  always make sure the variables in the Store and retrieve sections are in the same order.
 #ifdef DELTA
-#define EEPROM_VERSION "V12"
+#define EEPROM_VERSION "V13"
 #else
-#define EEPROM_VERSION "V12"
+#define EEPROM_VERSION "V13"
 #endif
 
 #ifdef EEPROM_SETTINGS
@@ -82,10 +82,12 @@ void Config_StoreSettings()
     EEPROM_WRITE_VAR(i,Kp);
     EEPROM_WRITE_VAR(i,Ki);
     EEPROM_WRITE_VAR(i,Kd);
+    EEPROM_WRITE_VAR(i,Kc);
   #else
-		float dummy = 3000.0f;
+	float dummy = 3000.0f;
     EEPROM_WRITE_VAR(i,dummy);
-		dummy = 0.0f;
+	dummy = 0.0f;
+    EEPROM_WRITE_VAR(i,dummy);
     EEPROM_WRITE_VAR(i,dummy);
     EEPROM_WRITE_VAR(i,dummy);
   #endif
@@ -185,6 +187,22 @@ void Config_PrintSettings()
 	SERIAL_ECHOPAIR(" S" ,delta_segments_per_second );
 	SERIAL_ECHOLN("");
 #endif
+    SERIAL_ECHO_START;
+    SERIAL_ECHOLNPGM("Preheat PLA adjustments:");
+    SERIAL_ECHO_START;
+    SERIAL_ECHOPAIR("  M216 H",(long unsigned int)plaPreheatHotendTemp);
+    SERIAL_ECHOPAIR(" B" ,(long unsigned int)plaPreheatHPBTemp);
+    SERIAL_ECHOPAIR(" F" ,(long unsigned int)plaPreheatFanSpeed);
+    SERIAL_ECHOLN("");
+
+    SERIAL_ECHO_START;
+    SERIAL_ECHOLNPGM("Preheat ABS adjustments:");
+    SERIAL_ECHO_START;
+    SERIAL_ECHOPAIR("  M217 H",(long unsigned int)absPreheatHotendTemp);
+    SERIAL_ECHOPAIR(" B" ,(long unsigned int)absPreheatHPBTemp);
+    SERIAL_ECHOPAIR(" F" ,(long unsigned int)absPreheatFanSpeed);
+    SERIAL_ECHOLN("");
+
 #ifdef PIDTEMP
     SERIAL_ECHO_START;
     SERIAL_ECHOLNPGM("PID settings:");
@@ -192,6 +210,7 @@ void Config_PrintSettings()
     SERIAL_ECHOPAIR("   M301 P",Kp); 
     SERIAL_ECHOPAIR(" I" ,unscalePID_i(Ki)); 
     SERIAL_ECHOPAIR(" D" ,unscalePID_d(Kd));
+    SERIAL_ECHOPAIR(" C" ,Kc);
     SERIAL_ECHOLN(""); 
 #endif
 #ifdef DUAL_X_CARRIAGE
@@ -269,6 +288,7 @@ void Config_RetrieveSettings()
         EEPROM_READ_VAR(i,Kp);
         EEPROM_READ_VAR(i,Ki);
         EEPROM_READ_VAR(i,Kd);
+        EEPROM_READ_VAR(i,Kc);
         #ifndef DOGLCD
         int lcd_contrast;
         #endif
@@ -362,7 +382,6 @@ void Config_ResetDefault()
     Kp = DEFAULT_Kp;
     Ki = scalePID_i(DEFAULT_Ki);
     Kd = scalePID_d(DEFAULT_Kd);
-    
     // call updatePID (similar to when we have processed M301)
     updatePID();
     
