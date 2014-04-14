@@ -2500,7 +2500,7 @@ void process_commands()
         }
         break;
     }
-    case 217://M216 Change Preheat PLA settings. H=Nozzle, B= bed, F= fan
+    case 217://M216 Change Preheat ABS settings. H=Nozzle, B= bed, F= fan
     {
         if(code_seen('H'))
         {
