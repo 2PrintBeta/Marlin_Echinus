@@ -179,7 +179,9 @@
     #define MSG_INVERT_X2 "Invert X2 dir"
     #define MSG_INVERT_Y "Invert Y dir"
     #define MSG_INVERT_Z "Invert Z dir"
-    #define MSG_INVERT_E "Invert E dir"
+    #define MSG_INVERT_E "Invert E0 dir"
+    #define MSG_INVERT_E "Invert E1 dir"
+    #define MSG_INVERT_E "Invert E2 dir"
 
 // Serial Console Messages
 
