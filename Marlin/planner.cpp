@@ -544,13 +544,6 @@ void plan_buffer_line(float x, float y, float z, const float &e, float feed_rate
 void plan_buffer_line(const float &x, const float &y, const float &z, const float &e, float feed_rate, const uint8_t &extruder)
 #endif  //ENABLE_AUTO_BED_LEVELING
 {
-    SERIAL_ECHOPGM("New line: ");
-    SERIAL_ECHO(x);
-    SERIAL_ECHOPGM(" ");
-    SERIAL_ECHO(y);
-    SERIAL_ECHOPGM(" ");
-    SERIAL_ECHOLN(z);
-
   // Calculate the buffer head after we push this byte
   int next_buffer_head = next_block_index(block_buffer_head);
 
