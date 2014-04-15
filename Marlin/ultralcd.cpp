@@ -1127,9 +1127,9 @@ static void lcd_control_motion_menu()
 #endif
     MENU_ITEM_EDIT(bool, MSG_INVERT_Y, &invert_y_dir);
     MENU_ITEM_EDIT(bool, MSG_INVERT_Z, &invert_z_dir);
-    MENU_ITEM_EDIT(bool, MSG_INVERT_E, &invert_e0_dir);
-    MENU_ITEM_EDIT(bool, MSG_INVERT_E, &invert_e1_dir);
-    MENU_ITEM_EDIT(bool, MSG_INVERT_E, &invert_e2_dir);
+    MENU_ITEM_EDIT(bool, MSG_INVERT_E0, &invert_e0_dir);
+    MENU_ITEM_EDIT(bool, MSG_INVERT_E1, &invert_e1_dir);
+    MENU_ITEM_EDIT(bool, MSG_INVERT_E2, &invert_e2_dir);
 
 #ifdef ABORT_ON_ENDSTOP_HIT_FEATURE_ENABLED
     MENU_ITEM_EDIT(bool, MSG_ENDSTOP_ABORT, &abort_on_endstop_hit);
