@@ -86,6 +86,8 @@ Echinus_Config::Echinus_Config(QWidget *parent) : QMainWindow(parent)
     invertDir[2] = ui.invertDir3;
     invertDir[3] = ui.invertDir4;
     invertDir[4] = ui.invertDir5;
+    invertDir[5] = ui.invertDir6;
+    invertDir[6] = ui.invertDir7;
 
     //UI options verbinden
 
@@ -111,7 +113,7 @@ Echinus_Config::Echinus_Config(QWidget *parent) : QMainWindow(parent)
     connect(&maxAccelerationMapper,SIGNAL(mapped(int)),this,SLOT(maxAccelerationChanged(int)));
 
 
-    for(int i=0; i < 5; i++)
+    for(int i=0; i < 7; i++)
     {
         connect(invertDir[i],SIGNAL(stateChanged(int)),&invertDirMapper,SLOT(map()));
         invertDirMapper.setMapping(invertDir[i],i);
@@ -240,7 +242,7 @@ void Echinus_Config::updateUI()
         maxAcceleration[i]->blockSignals(false);
     }
 
-    for(int i=0; i < 5; i++)
+    for(int i=0; i < 7; i++)
     {
         invertDir[i]->blockSignals(true);
         invertDir[i]->setChecked(configValues.getInvertDir(i));

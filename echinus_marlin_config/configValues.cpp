@@ -226,7 +226,7 @@ bool ConfigValues::readConfig()
     }
 
     // Axis inversions
-    QRegExp rxInvert("M215 X(\\d*) B(\\d*) Y(\\d*) Z(\\d*) U(\\d*)");
+    QRegExp rxInvert("M215 X(\\d*) B(\\d*) Y(\\d*) Z(\\d*) U(\\d*) V(\\d*) W(\\d*)");
     pos = rxInvert.indexIn(input);
     if (pos > -1)
     {
@@ -235,7 +235,8 @@ bool ConfigValues::readConfig()
         motorConfig[1].inv_dir = rxInvert.cap(3).toInt();
         motorConfig[2].inv_dir = rxInvert.cap(4).toInt();
         motorConfig[3].inv_dir = rxInvert.cap(5).toInt();
-
+        motorConfig[5].inv_dir = rxInvert.cap(6).toInt();
+        motorConfig[6].inv_dir = rxInvert.cap(7).toInt();
     }
     else
     {
@@ -322,6 +323,8 @@ void ConfigValues::importConfig()
     setInvertDir(2,settings.value("inv_dir2").toBool());
     setInvertDir(3,settings.value("inv_dir3").toBool());
     setInvertDir(4,settings.value("inv_dir4").toBool());
+    setInvertDir(5,settings.value("inv_dir5").toBool());
+    setInvertDir(6,settings.value("inv_dir6").toBool());
     settings.endGroup();
 
     settings.beginGroup("PIDOptions");
@@ -399,6 +402,8 @@ void ConfigValues::exportConfig()
     settings.setValue("inv_dir2",motorConfig[2].inv_dir);
     settings.setValue("inv_dir3",motorConfig[3].inv_dir);
     settings.setValue("inv_dir4",motorConfig[4].inv_dir);
+    settings.setValue("inv_dir4",motorConfig[5].inv_dir);
+    settings.setValue("inv_dir4",motorConfig[6].inv_dir);
     settings.endGroup();
 
 
@@ -555,11 +560,19 @@ void ConfigValues::setInvertDir(int index, bool value)
             cmd = QString("M215 Z%1\n").arg(value);
             break;
         case 3:
-            cmd = QString("M215 E%1\n").arg(value);
+            cmd = QString("M215 U%1\n").arg(value);
             break;
         case 4:
             cmd = QString("M215 B%1\n").arg(value);
             break;
+        case 5:
+            cmd = QString("M215 V%1\n").arg(value);
+            break;
+        case 6:
+            cmd = QString("M215 W%1\n").arg(value);
+            break;
+
+
     }
     QString input = serialCommand(cmd);
     if(!input.startsWith("ok"))

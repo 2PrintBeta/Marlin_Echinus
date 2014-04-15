@@ -157,7 +157,7 @@ private:
     QString serialCommand(QString cmd);
 
     QString m_firmwareVersion;
-    MotorConfig motorConfig[5];
+    MotorConfig motorConfig[7];
     PidConfig pidConfig;
     AccelerationConfig accelerationConfig;
     AdvancedConfig advancedConfig;
