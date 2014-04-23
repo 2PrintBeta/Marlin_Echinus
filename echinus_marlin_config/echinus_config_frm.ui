@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>757</width>
-    <height>448</height>
+    <height>494</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -85,10 +85,120 @@
               <string>Motor options</string>
              </property>
              <layout class="QGridLayout" name="gridLayout_3">
-              <item row="2" column="6">
-               <widget class="QDoubleSpinBox" name="maxFeedrate1">
+              <item row="7" column="1">
+               <widget class="QLabel" name="label_28">
+                <property name="text">
+                 <string>E2:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="1">
+               <widget class="QLabel" name="label_3">
+                <property name="text">
+                 <string>X:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="4">
+               <widget class="QDoubleSpinBox" name="stepsPerMm1">
+                <property name="maximum">
+                 <double>9999.000000000000000</double>
+                </property>
+               </widget>
+              </item>
+              <item row="6" column="12">
+               <widget class="QCheckBox" name="invertDir5">
+                <property name="text">
+                 <string/>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="4">
+               <widget class="QLabel" name="label_7">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="text">
+                 <string>Steps per mm</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="9">
+               <widget class="QSpinBox" name="maxAccel2">
+                <property name="maximum">
+                 <number>99999</number>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="4">
+               <widget class="QDoubleSpinBox" name="stepsPerMm4">
                 <property name="maximum">
                  <double>99999.990000000005239</double>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="5">
+               <widget class="Line" name="line_3">
+                <property name="orientation">
+                 <enum>Qt::Vertical</enum>
+                </property>
+               </widget>
+              </item>
+              <item row="6" column="1">
+               <widget class="QLabel" name="label_6">
+                <property name="text">
+                 <string>X2:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="8">
+               <widget class="Line" name="line_19">
+                <property name="orientation">
+                 <enum>Qt::Vertical</enum>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1">
+               <widget class="QLabel" name="label_4">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="text">
+                 <string>Axis</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="12">
+               <widget class="QCheckBox" name="invertDir2">
+                <property name="text">
+                 <string/>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="4">
+               <widget class="QDoubleSpinBox" name="stepsPerMm2">
+                <property name="maximum">
+                 <double>99999.990000000005239</double>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="4">
+               <widget class="QDoubleSpinBox" name="stepsPerMm3">
+                <property name="maximum">
+                 <double>99999.990000000005239</double>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="12">
+               <widget class="QCheckBox" name="invertDir4">
+                <property name="text">
+                 <string/>
                 </property>
                </widget>
               </item>
@@ -117,36 +227,45 @@ p, li { white-space: pre-wrap; }
                 </property>
                </widget>
               </item>
-              <item row="0" column="4">
-               <widget class="QLabel" name="label_7">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-                <property name="text">
-                 <string>Steps per mm</string>
-                </property>
-               </widget>
-              </item>
-              <item row="3" column="6">
-               <widget class="QDoubleSpinBox" name="maxFeedrate2">
+              <item row="5" column="6">
+               <widget class="QDoubleSpinBox" name="maxFeedrate4">
                 <property name="maximum">
                  <double>99999.990000000005239</double>
                 </property>
                </widget>
               </item>
-              <item row="0" column="1">
-               <widget class="QLabel" name="label_4">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
+              <item row="2" column="12">
+               <widget class="QCheckBox" name="invertDir1">
                 <property name="text">
-                 <string>Axis</string>
+                 <string/>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="9">
+               <widget class="QSpinBox" name="maxAccel4">
+                <property name="maximum">
+                 <number>99999</number>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="12">
+               <widget class="QCheckBox" name="invertDir3">
+                <property name="text">
+                 <string/>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="9">
+               <widget class="QSpinBox" name="maxAccel3">
+                <property name="maximum">
+                 <number>99999</number>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="6">
+               <widget class="QDoubleSpinBox" name="maxFeedrate1">
+                <property name="maximum">
+                 <double>99999.990000000005239</double>
                 </property>
                </widget>
               </item>
@@ -157,10 +276,24 @@ p, li { white-space: pre-wrap; }
                 </property>
                </widget>
               </item>
-              <item row="0" column="5">
-               <widget class="Line" name="line_3">
-                <property name="orientation">
-                 <enum>Qt::Vertical</enum>
+              <item row="0" column="9">
+               <widget class="QLabel" name="label_5">
+                <property name="text">
+                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;Maximum &lt;br/&gt; acceleration&lt;/body&gt;&lt;/html&gt;</string>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="1">
+               <widget class="QLabel" name="label_13">
+                <property name="text">
+                 <string>Z:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="1">
+               <widget class="QLabel" name="label_14">
+                <property name="text">
+                 <string>E:</string>
                 </property>
                </widget>
               </item>
@@ -168,6 +301,13 @@ p, li { white-space: pre-wrap; }
                <widget class="Line" name="line_4">
                 <property name="orientation">
                  <enum>Qt::Vertical</enum>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="1" colspan="12">
+               <widget class="Line" name="line">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
                 </property>
                </widget>
               </item>
@@ -189,31 +329,10 @@ p, li { white-space: pre-wrap; }
                 </property>
                </widget>
               </item>
-              <item row="1" column="1" colspan="12">
-               <widget class="Line" name="line">
-                <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
-                </property>
-               </widget>
-              </item>
-              <item row="2" column="1">
-               <widget class="QLabel" name="label_3">
-                <property name="text">
-                 <string>X:</string>
-                </property>
-               </widget>
-              </item>
-              <item row="2" column="4">
-               <widget class="QDoubleSpinBox" name="stepsPerMm1">
+              <item row="2" column="9">
+               <widget class="QSpinBox" name="maxAccel1">
                 <property name="maximum">
-                 <double>9999.000000000000000</double>
-                </property>
-               </widget>
-              </item>
-              <item row="2" column="12">
-               <widget class="QCheckBox" name="invertDir1">
-                <property name="text">
-                 <string/>
+                 <number>9999</number>
                 </property>
                </widget>
               </item>
@@ -224,120 +343,29 @@ p, li { white-space: pre-wrap; }
                 </property>
                </widget>
               </item>
-              <item row="4" column="1">
-               <widget class="QLabel" name="label_13">
+              <item row="3" column="6">
+               <widget class="QDoubleSpinBox" name="maxFeedrate2">
+                <property name="maximum">
+                 <double>99999.990000000005239</double>
+                </property>
+               </widget>
+              </item>
+              <item row="8" column="1">
+               <widget class="QLabel" name="label_32">
                 <property name="text">
-                 <string>Z:</string>
+                 <string>E3:</string>
                 </property>
                </widget>
               </item>
-              <item row="5" column="1">
-               <widget class="QLabel" name="label_14">
-                <property name="text">
-                 <string>E:</string>
-                </property>
-               </widget>
-              </item>
-              <item row="3" column="4">
-               <widget class="QDoubleSpinBox" name="stepsPerMm2">
-                <property name="maximum">
-                 <double>99999.990000000005239</double>
-                </property>
-               </widget>
-              </item>
-              <item row="4" column="4">
-               <widget class="QDoubleSpinBox" name="stepsPerMm3">
-                <property name="maximum">
-                 <double>99999.990000000005239</double>
-                </property>
-               </widget>
-              </item>
-              <item row="5" column="4">
-               <widget class="QDoubleSpinBox" name="stepsPerMm4">
-                <property name="maximum">
-                 <double>99999.990000000005239</double>
-                </property>
-               </widget>
-              </item>
-              <item row="3" column="12">
-               <widget class="QCheckBox" name="invertDir2">
+              <item row="7" column="12">
+               <widget class="QCheckBox" name="invertDir6">
                 <property name="text">
                  <string/>
                 </property>
                </widget>
               </item>
-              <item row="4" column="12">
-               <widget class="QCheckBox" name="invertDir3">
-                <property name="text">
-                 <string/>
-                </property>
-               </widget>
-              </item>
-              <item row="5" column="12">
-               <widget class="QCheckBox" name="invertDir4">
-                <property name="text">
-                 <string/>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="8">
-               <widget class="Line" name="line_19">
-                <property name="orientation">
-                 <enum>Qt::Vertical</enum>
-                </property>
-               </widget>
-              </item>
-              <item row="5" column="6">
-               <widget class="QDoubleSpinBox" name="maxFeedrate4">
-                <property name="maximum">
-                 <double>99999.990000000005239</double>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="9">
-               <widget class="QLabel" name="label_5">
-                <property name="text">
-                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;Maximum &lt;br/&gt; acceleration&lt;/body&gt;&lt;/html&gt;</string>
-                </property>
-               </widget>
-              </item>
-              <item row="2" column="9">
-               <widget class="QSpinBox" name="maxAccel1">
-                <property name="maximum">
-                 <number>9999</number>
-                </property>
-               </widget>
-              </item>
-              <item row="5" column="9">
-               <widget class="QSpinBox" name="maxAccel4">
-                <property name="maximum">
-                 <number>99999</number>
-                </property>
-               </widget>
-              </item>
-              <item row="4" column="9">
-               <widget class="QSpinBox" name="maxAccel3">
-                <property name="maximum">
-                 <number>99999</number>
-                </property>
-               </widget>
-              </item>
-              <item row="3" column="9">
-               <widget class="QSpinBox" name="maxAccel2">
-                <property name="maximum">
-                 <number>99999</number>
-                </property>
-               </widget>
-              </item>
-              <item row="6" column="1">
-               <widget class="QLabel" name="label_6">
-                <property name="text">
-                 <string>X2:</string>
-                </property>
-               </widget>
-              </item>
-              <item row="6" column="12">
-               <widget class="QCheckBox" name="invertDir5">
+              <item row="8" column="12">
+               <widget class="QCheckBox" name="invertDir7">
                 <property name="text">
                  <string/>
                 </property>
