@@ -476,6 +476,11 @@ void setup()
   setup_killpin();
   setup_powerhold();
   
+  #if defined(LED_PIN) && LED_PIN > -1
+    pinMode(LED_PIN,OUTPUT);
+    WRITE(LED_PIN,LOW);
+  #endif
+  
   #if MOTHERBOARD == 42
     init_PCA9555();
   #endif
