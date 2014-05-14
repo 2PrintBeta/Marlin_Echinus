@@ -99,7 +99,7 @@ class Echinus_Config : public QMainWindow
         QDoubleSpinBox* stepPerMm[4];
         QDoubleSpinBox* maxFeedrate[4];
         QSpinBox* maxAcceleration[4];
-        QCheckBox* invertDir[5];
+        QCheckBox* invertDir[7];
 
 };
 
