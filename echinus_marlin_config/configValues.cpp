@@ -221,8 +221,10 @@ bool ConfigValues::readConfig()
     }
     else
     {
-        QMessageBox::warning(NULL,"Error",  "could not capture Extruder Offsets");
-        return false;
+        //single extruder firmwares do not have these, fail silently
+        extruderOffsets.xoffset = 0;
+        extruderOffsets.yoffset = 0;
+        extruderOffsets.zoffset = 0;
     }
 
     // Axis inversions
@@ -733,10 +735,13 @@ void ConfigValues::setExtruderXOffset(double value)
     QString input = serialCommand(cmd);
     if(!input.endsWith("ok"))
     {
-        QMessageBox::warning(NULL,"Error",  "Could not set Extruder Offset X value: " + input);
-        return;
+        // single extruder firmwares do not have these, fail silently
+        extruderOffsets.xoffset =0;
     }
+    else
+    {
     extruderOffsets.xoffset= value;
+    }
 }
 
 void ConfigValues::setExtruderYOffset(double value)
