@@ -10,6 +10,36 @@
 
 #include "pca9555.h"
 
+unsigned char timsk_save=0;
+unsigned char etimsk_save=0;
+unsigned char adcsra_save=0;
+unsigned char do_restore = 0;
+
+void enable_uart_interrupt()
+{
+	if((SREG & (1<<7)) == 0)
+	{
+		etimsk_save = ETIMSK;
+		timsk_save = TIMSK;
+		adcsra_save = ADCSRA;
+		ETIMSK = 0; // (1 << OCIE3B);	// system clock must 
+		TIMSK = 0;  			// be set enabled always for security reasons
+		sei();	
+		do_restore=1;
+	}	
+}
+
+void restore_interrupt_state()
+{
+	if(do_restore)
+	{
+		cli();
+		ETIMSK = etimsk_save;
+		TIMSK = timsk_save;
+		do_restore = 0;
+	}
+}
+
 struct pindef_t pindef[] = 
 {
 	{PINE0,&PINE,&PORTE,&DDRE,NULL},
@@ -89,7 +119,9 @@ void write_bit(uint32_t io, uint8_t value)
 	if(io & I2C_PIN)
 	{
 		unsigned char _sreg = SREG; cli();
+        enable_uart_interrupt();
 		write_PCA9555(io,value);
+        restore_interrupt_state();
 		SREG = _sreg; 
 	}
 	else
