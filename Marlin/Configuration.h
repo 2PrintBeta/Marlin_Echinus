@@ -444,7 +444,7 @@ const bool Z_MAX_ENDSTOP_INVERTING = true; // set to true to invert the logic of
 // default settings
 
 #define DEFAULT_AXIS_STEPS_PER_UNIT   {80.245,80.245,1408,880}  // default steps per unit for Ultimaker
-#define DEFAULT_MAX_FEEDRATE          {150, 150, 5, 25}    // (mm/sec)
+#define DEFAULT_MAX_FEEDRATE          {100, 100, 5, 25}    // (mm/sec)
 #define DEFAULT_MAX_ACCELERATION      {9000,9000,100,10000}    // X, Y, Z, E maximum start speed for accelerated moves. E default values are good for Skeinforge 40+, for older versions raise them a lot.
 
 #define DEFAULT_ACCELERATION          3000    // X, Y, Z and E max acceleration in mm/s^2 for printing moves
@@ -481,13 +481,13 @@ const bool Z_MAX_ENDSTOP_INVERTING = true; // set to true to invert the logic of
 #define EEPROM_CHITCHAT
 
 // Preheat Constants
-#define PLA_PREHEAT_HOTEND_TEMP 180
-#define PLA_PREHEAT_HPB_TEMP 70
-#define PLA_PREHEAT_FAN_SPEED 255   // Insert Value between 0 and 255
+#define PLA_PREHEAT_HOTEND_TEMP 205
+#define PLA_PREHEAT_HPB_TEMP 60
+#define PLA_PREHEAT_FAN_SPEED 180   // Insert Value between 0 and 255
 
 #define ABS_PREHEAT_HOTEND_TEMP 240
 #define ABS_PREHEAT_HPB_TEMP 100
-#define ABS_PREHEAT_FAN_SPEED 255   // Insert Value between 0 and 255
+#define ABS_PREHEAT_FAN_SPEED 150   // Insert Value between 0 and 255
 
 //LCD and SD support
 //#define ULTRA_LCD  //general LCD support, also 16x2
