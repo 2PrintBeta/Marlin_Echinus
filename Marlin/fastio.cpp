@@ -13,6 +13,7 @@
 unsigned char timsk_save=0;
 unsigned char etimsk_save=0;
 unsigned char adcsra_save=0;
+unsigned char eimsk_save =0;
 unsigned char do_restore = 0;
 
 void enable_uart_interrupt()
@@ -22,8 +23,10 @@ void enable_uart_interrupt()
 		etimsk_save = ETIMSK;
 		timsk_save = TIMSK;
 		adcsra_save = ADCSRA;
+		eimsk_save = EIMSK;
 		ETIMSK = 0; // (1 << OCIE3B);	// system clock must 
 		TIMSK = 0;  			// be set enabled always for security reasons
+		EIMSK = 0;
 		sei();	
 		do_restore=1;
 	}	
@@ -36,6 +39,7 @@ void restore_interrupt_state()
 		cli();
 		ETIMSK = etimsk_save;
 		TIMSK = timsk_save;
+		EIMSK = eimsk_save;
 		do_restore = 0;
 	}
 }

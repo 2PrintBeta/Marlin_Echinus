@@ -3,15 +3,6 @@
 
 #include <avr/io.h>
 
-/*
-void init_PCA9555 () __attribute__ ((cold));
-void write_PCA9555(uint32_t pin, uint8_t value);
-uint8_t read_PCA9555(uint32_t pin);
-void setoutput_PCA9555(uint32_t pin);
-void setinput_PCA9555(uint32_t pin);
-uint8_t read_PCA9555_inputs();
-*/
-
 typedef struct							/** struct for the software-mirror of PCA9555- devices **/
 {
 	uint8_t inRegL;						// status of input is saved here, when dirReg-pin is set (in)

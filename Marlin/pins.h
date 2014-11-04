@@ -2523,6 +2523,7 @@
  #error Oops!  Make sure you have 'Echinus' selected from the 'Tools -> Boards' menu.
 #endif
 
+
 #define NUM_OF_I2C_EXPANDERS 2
 // masks to encode i2c info into the pins
 #define I2C_PIN 0x8000		 //use i2c ?
@@ -2568,6 +2569,7 @@
 #define E1_DIR_PIN         I2C_PIN|I2C_CHIP2|I2C_LOWBYTE|1 
 #define E1_ENABLE_PIN      I2C_PIN|I2C_CHIP2|I2C_LOWBYTE|0 
 
+#define LCD_BEEPER         I2C_PIN|I2C_CHIP1|I2C_HIGHBYTE|7
 
 #define LED_PIN            42
 #define LED2_PIN           41

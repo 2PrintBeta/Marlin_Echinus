@@ -2663,7 +2663,7 @@ void process_commands()
       break;
     #endif // NUM_SERVOS > 0
 
-    #if (LARGE_FLASH == true && ( BEEPER > 0 || defined(ULTRALCD) || defined(LCD_USE_I2C_BUZZER)))
+    #if (( BEEPER > 0 || defined(ULTRA_LCD) || defined(LCD_USE_I2C_BUZZER)))
     case 300: // M300
     {
       int beepS = code_seen('S') ? code_value() : 110;
@@ -2674,8 +2674,14 @@ void process_commands()
           tone(BEEPER, beepS);
           delay(beepP);
           noTone(BEEPER);
-        #elif defined(ULTRALCD)
-		  lcd_buzz(beepS, beepP);
+        #elif defined(ULTRA_LCD)
+			#ifdef ECHINUS_VISION
+				WRITE(LCD_BEEPER,1);
+				delay(beepP);
+				WRITE(LCD_BEEPER,0);
+			#else
+				lcd_buzz(beepS, beepP);
+			#endif
 		#elif defined(LCD_USE_I2C_BUZZER)
 		  lcd_buzz(beepP, beepS);
         #endif

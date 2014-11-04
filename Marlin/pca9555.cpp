@@ -137,7 +137,7 @@ void write_PCA9555(uint16_t pin, uint8_t value)
 
 ISR(INT6_vect)	// // EXTERNAL INTERRUPT 6 used to get pin change information from PCA9555 
 {
-     // read from i2c chip 0, highbyte (EXTPORT)
+    // read from i2c chip 0, highbyte (EXTPORT)
 	writeI2Ccmd(i2cPortBuf[0][I2C_ADDR], REG_IN+1);// set adress of input for external port
 	i2c_start_wait(i2cPortBuf[0][I2C_ADDR] + 1); 		// read device
 	i2cPortBuf[0][REG_IN+1] = i2c_readNak();
