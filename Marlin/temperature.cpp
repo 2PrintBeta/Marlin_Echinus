@@ -1053,6 +1053,8 @@ ISR(TIMER0B_COMP_vect)
 #endif
 {
   //these variables are only accesible from the ISR, but static, so they don't lose their value
+  static unsigned char err_count =0;
+  #define MAX_ERR_CNT 5
   static unsigned char temp_count = 0;
   static unsigned long raw_temp_0_value = 0;
   static unsigned long raw_temp_1_value = 0;
@@ -1137,7 +1139,17 @@ ISR(TIMER0B_COMP_vect)
       break;
     case 1: // Measure TEMP_0
       #if defined(TEMP_0_PIN) && (TEMP_0_PIN > -1)
-        raw_temp_0_value += ADC;
+	    if((ADC > 1020) && err_count < MAX_ERR_CNT)  //ignore very high values unless we see them many times in a row
+		{
+		   err_count++;  //increase err count
+		   temp_state = 0;  //start conversion again
+		   break;
+		}
+		else
+		{
+			raw_temp_0_value += ADC;
+			err_count = 0;
+		}
       #endif
       #ifdef HEATER_0_USES_MAX6675 // TODO remove the blocking
         raw_temp_0_value = read_max6675();
@@ -1161,7 +1173,17 @@ ISR(TIMER0B_COMP_vect)
       break;
     case 3: // Measure TEMP_BED
       #if defined(TEMP_BED_PIN) && (TEMP_BED_PIN > -1)
-        raw_temp_bed_value += ADC;
+	   if((ADC > 1020) && err_count < MAX_ERR_CNT)  //ignore very high values unless we see them many times in a row
+	   {
+	   	   err_count++;  //increase err count
+		   temp_state = 2;  //start conversion again
+		   break;
+	   }
+	   else
+	   {
+			raw_temp_bed_value += ADC;
+			err_count = 0;
+	   }
       #endif
       temp_state = 4;
       break;
@@ -1182,7 +1204,17 @@ ISR(TIMER0B_COMP_vect)
       break;
     case 5: // Measure TEMP_1
       #if defined(TEMP_1_PIN) && (TEMP_1_PIN > -1)
-        raw_temp_1_value += ADC;
+        if((ADC > 1020) && err_count < MAX_ERR_CNT)  //ignore very high values unless we see them many times in a row
+	    {
+	   	   err_count++;  //increase err count
+		   temp_state = 4;  //start conversion again
+		   break;
+	    }
+	    else
+	    {
+			raw_temp_1_value += ADC;
+			err_count =0;
+		}
       #endif
       temp_state = 6;
       break;
@@ -1203,7 +1235,17 @@ ISR(TIMER0B_COMP_vect)
       break;
     case 7: // Measure TEMP_2
       #if defined(TEMP_2_PIN) && (TEMP_2_PIN > -1)
-        raw_temp_2_value += ADC;
+		if((ADC > 1020) && err_count < MAX_ERR_CNT)  //ignore very high values unless we see them many times in a row
+	    {
+	   	   err_count++;  //increase err count
+		   temp_state = 6;  //start conversion again
+		   break;
+	    }
+	    else
+	    {
+			raw_temp_2_value += ADC;
+			err_count =0;
+		}
       #endif
       temp_state = 0;
       temp_count++;
