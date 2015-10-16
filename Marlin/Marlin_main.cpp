@@ -2489,6 +2489,7 @@ void process_commands()
         }
         break;
     }
+	#ifdef ULTIPANEL
     case 216:  //M216 Change Preheat PLA settings. H=Nozzle, B= bed, F= fan
     {
         if(code_seen('H'))
@@ -2521,6 +2522,7 @@ void process_commands()
         }
         break;
     }
+	#endif
     #if EXTRUDERS > 1
     case 218: // M218 - set hotend offset (in mm), T<extruder_number> X<offset_on_X> Y<offset_on_Y>
     {

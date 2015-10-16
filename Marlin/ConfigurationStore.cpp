@@ -187,6 +187,7 @@ void Config_PrintSettings()
 	SERIAL_ECHOPAIR(" S" ,delta_segments_per_second );
 	SERIAL_ECHOLN("");
 #endif
+#ifdef ULTIPANEL
     SERIAL_ECHO_START;
     SERIAL_ECHOLNPGM("Preheat PLA adjustments:");
     SERIAL_ECHO_START;
@@ -202,7 +203,24 @@ void Config_PrintSettings()
     SERIAL_ECHOPAIR(" B" ,(long unsigned int)absPreheatHPBTemp);
     SERIAL_ECHOPAIR(" F" ,(long unsigned int)absPreheatFanSpeed);
     SERIAL_ECHOLN("");
+#else
+	int temp = 0;
+	SERIAL_ECHO_START;
+    SERIAL_ECHOLNPGM("Preheat PLA adjustments:");
+    SERIAL_ECHO_START;
+    SERIAL_ECHOPAIR("  M216 H",(long unsigned int)temp);
+    SERIAL_ECHOPAIR(" B" ,(long unsigned int)temp);
+    SERIAL_ECHOPAIR(" F" ,(long unsigned int)temp);
+    SERIAL_ECHOLN("");
 
+    SERIAL_ECHO_START;
+    SERIAL_ECHOLNPGM("Preheat ABS adjustments:");
+    SERIAL_ECHO_START;
+    SERIAL_ECHOPAIR("  M217 H",(long unsigned int)temp);
+    SERIAL_ECHOPAIR(" B" ,(long unsigned int)temp);
+    SERIAL_ECHOPAIR(" F" ,(long unsigned int)temp);
+    SERIAL_ECHOLN("");
+#endif
 #ifdef PIDTEMP
     SERIAL_ECHO_START;
     SERIAL_ECHOLNPGM("PID settings:");
