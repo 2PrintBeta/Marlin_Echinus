@@ -211,7 +211,7 @@ bool ConfigValues::readConfig()
     }
 
     // ExtruderOffset
-    QRegExp rxoffset("M218 T1 X(\\d*\\.\\d*) Y(\\d*\\.\\d*) Z(\\d*\\.\\d*)");
+    QRegExp rxoffset("M218 T1 X(\\-?\\d*\\.\\d*) Y(\\-?\\d*\\.\\d*) Z(\\-?\\d*\\.\\d*)");
     pos = rxoffset.indexIn(input);
     if (pos > -1)
     {
